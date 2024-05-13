@@ -8,7 +8,7 @@ import adminPageSideStyle from "./AdminPageSide.css";
 const AdminPageMenus = [
   {
     title: "대시보드",
-    href: "#",
+    href: "/admin/dashboard",
   },
   {
     title: "스페이스 통계",

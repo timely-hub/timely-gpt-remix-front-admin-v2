@@ -117,3 +117,11 @@ export function calculateAge(birthday?: string | null): number {
 
   return age;
 }
+
+/** 천단위 쉼표 */
+export const thousand = (num?: number | string, decimalCount?: number) => {
+  if (!num || !Number(num)) num = 0;
+  if (typeof num === "string") num = Number(num);
+  if (decimalCount !== undefined) num = Number(num.toFixed(decimalCount));
+  return new Intl.NumberFormat("ko-KR").format(num);
+};

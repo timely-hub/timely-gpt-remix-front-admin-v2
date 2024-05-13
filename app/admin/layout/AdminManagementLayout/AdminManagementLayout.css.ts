@@ -30,7 +30,10 @@ const adminManagementLayoutStyles = {
   aside: style({
     flexShrink: 0,
     flex: "1",
-    height: "100vh",
+    position: "sticky",
+    top: 0,
+    height: "100%",
+    minHeight: "100vh",
     minWidth: "280px",
     maxWidth: "280px",
     borderRight: `1px solid ${vars.colors.Grayscale_Gray200}`,
