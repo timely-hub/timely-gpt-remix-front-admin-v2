@@ -57,6 +57,6 @@ export const adminManagementLayoutStyles = appStyles({
     backgroundColor: vars.colors["Grayscale/White"],
   },
   headerTitle: {
-    ...getTextStyles("Grayscale/Black", "Title/24px/24px.700"),
+    ...getTextStyles("Grayscale/Gray 500", "Title/18px/18px.400"),
   },
 });

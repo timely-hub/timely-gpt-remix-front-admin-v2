@@ -17,6 +17,13 @@ export const adminPageSideStyle = appStyles({
     cursor: "pointer",
     textDecoration: "none",
   },
+  submenuWrap: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "16px 8px",
+    cursor: "pointer",
+    textDecoration: "none",
+  },
   menuDropdown: {
     display: "flex",
     flexDirection: "column",
