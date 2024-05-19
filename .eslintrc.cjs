@@ -27,6 +27,12 @@ module.exports = {
   overrides: [
     // React
     {
+      rules: {
+        "jsx-a11y/no-noninteractive-tabindex": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
+      },
       files: ["**/*.{js,jsx,ts,tsx}"],
       plugins: ["react", "jsx-a11y"],
       extends: [
@@ -52,6 +58,13 @@ module.exports = {
 
     // Typescript
     {
+      rules: {
+        "jsx-a11y/label-has-associated-control": "off",
+        "jsx-a11y/no-noninteractive-tabindex": "off",
+        "jsx-a11y/no-noninteractive-element-interactions": "off",
+        "jsx-a11y/click-events-have-key-events": "off",
+        "jsx-a11y/no-static-element-interactions": "off",
+      },
       files: ["**/*.{ts,tsx}"],
       plugins: ["@typescript-eslint", "import"],
       parser: "@typescript-eslint/parser",

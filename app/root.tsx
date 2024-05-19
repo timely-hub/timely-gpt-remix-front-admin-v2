@@ -5,7 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import * as globalStyles from "~/admin/styles/global.css";
+import { figmaTheme } from "./styles/vars.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,7 +16,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className={globalStyles.defaultTheme}>
+      <body className={figmaTheme}>
         {children}
         <ScrollRestoration />
         <Scripts />

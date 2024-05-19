@@ -1,7 +1,7 @@
 import type { MetaFunction } from "@remix-run/node";
-import AdminPageSide from "~/admin/components/AdminPageSide/AdminPageSide";
-import Dashboard from "~/admin/components/Dashboard/Dashboard";
-import AdminManagementLayout from "~/admin/layout/AdminManagementLayout/AdminManagementLayout";
+import Dashboard from "~/components/Dashboard/index";
+import AdminPageSide from "~/components/SidePage/index";
+import AdminManagementLayout from "~/layouts/Sidebar/index";
 
 export const meta: MetaFunction = () => {
   return [

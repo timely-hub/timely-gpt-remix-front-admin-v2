@@ -1,6 +1,6 @@
-import AdminPageSide from "~/admin/components/AdminPageSide/AdminPageSide";
-import SpaceStatistics from "~/admin/components/Statistics/SpaceStatistics";
-import AdminManagementLayout from "~/admin/layout/AdminManagementLayout/AdminManagementLayout";
+import AdminPageSide from "~/components/SidePage/index";
+import SpaceStatistics from "~/components/Statistics/index";
+import AdminManagementLayout from "~/layouts/Sidebar/index";
 
 export default function AdminStatisticsUser() {
   return (
