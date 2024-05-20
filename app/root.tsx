@@ -5,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import AdminManagementLayout from "./layouts/Sidebar";
 import { figmaTheme } from "./styles/vars.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -17,7 +18,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className={figmaTheme}>
-        {children}
+        <AdminManagementLayout>{children}</AdminManagementLayout>
         <ScrollRestoration />
         <Scripts />
       </body>
