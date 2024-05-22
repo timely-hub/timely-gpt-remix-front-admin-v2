@@ -150,6 +150,14 @@ export const figmaColors = createThemeContract({
   "Blue/Blue 200": null,
   "Blue/Blue 500": null,
 });
+
+export const figmaShadows = {
+  ShadowXs: "0px 1px 2px 0px #33333333",
+  ShadowSm: "0px 1px 2px 0px #33333333, 0px 3px 3px 0px #33333333",
+  ShadowMd: "0px 2px 4px -2px #33333333, 0px 6px 8px -2px #33333333",
+  ShadowLg: "0px 4px 6px -2px #33333333, 0px 12px 16px -4px #33333333",
+  ShadowXl: "0px 8px 8px -4px #33333333, 0px 20px 24px -4px #33333333",
+};
 export const figmaTheme = createTheme(figmaColors, {
   "Grayscale/White": "#ffffff",
   "Grayscale/Gray 50": "#f7f8f9",
@@ -197,6 +205,7 @@ const styleConfigs = createThemeContract({
 
 export const vars = {
   ...styleConfigs,
+  shadows: figmaShadows,
   colors: figmaColors,
   typography: figmaTypography,
 };

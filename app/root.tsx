@@ -4,11 +4,16 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from "@remix-run/react";
+import "~/styles/global.css";
+import "~/styles/layout.css";
 import AdminManagementLayout from "./layouts/Sidebar";
 import { figmaTheme } from "./styles/vars.css";
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const pathname = useLocation().pathname;
+
   return (
     <html lang="en">
       <head>
@@ -18,7 +23,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className={figmaTheme}>
-        <AdminManagementLayout>{children}</AdminManagementLayout>
+        {pathname === "/login" ? (
+          <div>{children}</div>
+        ) : (
+          <AdminManagementLayout>{children}</AdminManagementLayout>
+        )}
         <ScrollRestoration />
         <Scripts />
       </body>

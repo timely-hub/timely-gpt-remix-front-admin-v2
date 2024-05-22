@@ -67,6 +67,9 @@ export const getBgColor = (color: keyof typeof figmaColors) => ({
 export const getFontColor = (color: keyof typeof figmaColors) => ({
   color: getColor(color),
 });
+export const getShadow = (shadow: keyof typeof vars.shadows) => ({
+  boxShadow: vars.shadows[shadow],
+});
 export const getTextStyles = (
   color: keyof typeof figmaColors,
   typography: keyof typeof figmaTypography

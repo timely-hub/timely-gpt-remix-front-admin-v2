@@ -1,7 +1,26 @@
+import { keyframes } from "@vanilla-extract/css";
 import { calc } from "@vanilla-extract/css-utils";
 import { getTextStyles } from "~/styles/helpers";
 import { appStyles } from "~/styles/layer.css";
 import { vars } from "~/styles/vars.css";
+
+const slide = keyframes({
+  from: {
+    transform: "translateX(-100%)",
+  },
+  to: {
+    transform: "translateX(0)",
+  },
+});
+
+const slideDown = keyframes({
+  from: {
+    transform: "translateY(-100%)",
+  },
+  to: {
+    transform: "translateY(0)",
+  },
+});
 
 export const adminManagementLayoutStyles = appStyles({
   wrap: {
@@ -27,6 +46,7 @@ export const adminManagementLayoutStyles = appStyles({
     display: "flex",
     alignItems: "center",
     ...vars.typography["Title/24px/24px.700"],
+    padding: "0 24px",
   },
   aside: {
     flexShrink: 0,
@@ -69,6 +89,9 @@ export const adminPageSideStyle = appStyles({
     padding: "0",
     width: "100%",
     position: "relative",
+  },
+  menu: {
+    animation: `${slide} 0.3s`,
   },
   menuLink: {
     display: "flex",

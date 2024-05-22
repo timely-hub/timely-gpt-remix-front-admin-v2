@@ -11,6 +11,7 @@ export const dashboardStyle = appStyles({
     border: `1px solid ${vars.colors["Grayscale/Gray 200"]}`,
     padding: "24px 20px",
     width: "20%",
+    height: "fit-content",
   },
   table: {
     width: "100%",
@@ -19,6 +20,7 @@ export const dashboardStyle = appStyles({
     borderSpacing: "0",
     textAlign: "left",
     tableLayout: "fixed",
+    marginBottom: "24px",
   },
   tableBorderBottom: {
     borderBottom: `1px solid ${vars.colors["Grayscale/Gray 200"]}`,
@@ -27,32 +29,40 @@ export const dashboardStyle = appStyles({
     borderSpacing: "0",
     textAlign: "left",
     tableLayout: "fixed",
-  },
-  th: {
-    border: `1px solid ${vars.colors["Grayscale/Gray 200"]}`,
-    backgroundColor: vars.colors["Grayscale/Gray 50"],
-    padding: "8px 16px",
-    ...getTextStyles("Grayscale/Black", "Body/16px/16px.400"),
+    marginBottom: "24px",
   },
   thBorderBottom: {
+    border: "none",
     backgroundColor: vars.colors["Grayscale/Gray 50"],
     borderBottom: `1px solid ${vars.colors["Grayscale/Gray 100"]}`,
     padding: "8px 16px",
     ...getTextStyles("Grayscale/Black", "Body/16px/16px.400"),
   },
-  td: {
-    border: `1px solid ${vars.colors["Grayscale/Gray 200"]}`,
-    padding: "8px 16px",
-  },
   tdBorderNone: {
     border: `none`,
     padding: "8px 16px",
   },
+  tdLink: {
+    color: vars.colors["Blue/Blue 500"],
+    textDecoration: "underline",
+    "&:hover": {
+      textDecoration: "none",
+    },
+  },
   title: {
-    ...getTextStyles("Grayscale/Black", "Body/16px/16px.400"),
-    marginBottom: "24px",
+    ...getTextStyles("Grayscale/Black", "Title/32px/32px.700"),
+  },
+  statisticsTitle: {
+    ...getTextStyles("Grayscale/Gray 500", "Body/16px/16px.500"),
+    marginBottom: "8px",
+  },
+  statisticValue: {
+    ...getTextStyles("Grayscale/Black", "Title/24px/24px.700"),
+    margin: "0",
+    textAlign: "right",
   },
   boxTitle: {
-    ...getTextStyles("Grayscale/Gray 500", "Body/16px/16px.400"),
+    ...getTextStyles("Grayscale/Black", "Title/24px/24px.700"),
+    marginBottom: "16px",
   },
 });

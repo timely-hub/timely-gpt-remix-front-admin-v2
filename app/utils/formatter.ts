@@ -30,7 +30,7 @@ export const dayJsFormatter = (
     format?: string;
     defaultValue?: string;
   } = {
-    format: "YYYY년 MM월 DD일 (ddd)",
+    format: "YYYY-MM-DD",
     defaultValue: "",
   }
 ) => {

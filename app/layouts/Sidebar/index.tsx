@@ -1,4 +1,5 @@
-import { Link } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
+import clsx from "clsx";
 import Box from "~/components/Box";
 import { SubMenu } from "./SubMenu";
 import { adminManagementLayoutStyles, adminPageSideStyle } from "./styles.css";
@@ -7,6 +8,7 @@ const AdminPageMenus = [
   {
     id: 0,
     title: "스페이스 통계",
+    name: "statistics",
     children: [
       {
         id: 0,
@@ -28,6 +30,7 @@ const AdminPageMenus = [
   {
     id: 1,
     title: "스페이스 관리",
+    name: "space",
     children: [
       {
         id: 0,
@@ -44,11 +47,13 @@ const AdminPageMenus = [
   {
     id: 2,
     title: "유저 관리",
+    name: "user",
     children: [{ id: 0, title: "유저 목록", href: "/user/list" }],
   },
   {
     id: 3,
     title: "스토어 관리",
+    name: "store",
     children: [
       {
         id: 0,
@@ -76,6 +81,8 @@ interface AdminManagementLayoutProps {
 export default function AdminManagementLayout({
   children,
 }: AdminManagementLayoutProps) {
+  const pathname = useLocation().pathname;
+
   return (
     <Box className={adminManagementLayoutStyles.wrap}>
       <Box className={adminManagementLayoutStyles.header}>
@@ -95,7 +102,14 @@ export default function AdminManagementLayout({
         <Box className={adminManagementLayoutStyles.aside}>
           <Box className={adminPageSideStyle.asideWrap}>
             <Link to="/" className={adminPageSideStyle.menuLink}>
-              <span className={adminPageSideStyle.menuTitle}>대시보드</span>
+              <span
+                className={clsx(
+                  adminPageSideStyle.menuTitle,
+                  pathname === "/" ? adminPageSideStyle.selected : null
+                )}
+              >
+                대시보드
+              </span>
             </Link>
             {AdminPageMenus.map((item) => {
               return <SubMenu item={item} key={item.id} />;
@@ -103,7 +117,9 @@ export default function AdminManagementLayout({
           </Box>
         </Box>
         <Box className={adminManagementLayoutStyles.main}>{children}</Box>
-        <Box className={adminManagementLayoutStyles.endSide}></Box>
+        {pathname !== "/" ? (
+          <Box className={adminManagementLayoutStyles.endSide}></Box>
+        ) : null}
       </Box>
     </Box>
   );

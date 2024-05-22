@@ -1,4 +1,5 @@
-import type { MetaFunction } from "@remix-run/node";
+import { type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import getDashboard from "~/Services/dashboard-controller/get-dashboard.server";
 import Dashboard from "~/components/Dashboard/index";
 
 export const meta: MetaFunction = () => {
@@ -8,8 +9,12 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async (args: LoaderFunctionArgs) => {
+  const response = await getDashboard(args);
+  console.log(response);
+  return response;
+};
+
 export default function AdminIndex() {
-  return (
-      <Dashboard />
-  );
+  return <Dashboard />;
 }
