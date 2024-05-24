@@ -22,8 +22,8 @@ const AdminPageMenus = [
       },
       {
         id: 2,
-        title: "스토어",
-        href: "/statistics/store",
+        title: "프롬프트",
+        href: "/statistics/prompt",
       },
     ],
   },
@@ -116,7 +116,9 @@ export default function AdminManagementLayout({
             })}
           </Box>
         </Box>
-        <Box className={adminManagementLayoutStyles.main}>{children}</Box>
+        <Box className={adminManagementLayoutStyles.main}>
+          <Box padding={"32px 24px"}>{children}</Box>
+        </Box>
         {pathname !== "/" ? (
           <Box className={adminManagementLayoutStyles.endSide}></Box>
         ) : null}

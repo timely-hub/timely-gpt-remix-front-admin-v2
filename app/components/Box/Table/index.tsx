@@ -1,7 +1,24 @@
 import clsx from "clsx";
 import { DetailedHTMLProps, HTMLAttributes } from "react";
-import { SprinklesOmit } from "~/styles/rainbow-sprinkles.css";
+import {
+  Sprinkles,
+  SprinklesOmit,
+  rainbowSprinkles,
+} from "~/styles/rainbow-sprinkles.css";
 import { tableStyles } from "./styles.css";
+
+export const Table = ({
+  children,
+  className,
+  ...props
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) => (
+  <table className={clsx(tableStyles.table, className)} {...props}>
+    {children}
+  </table>
+);
 
 export const TH = ({
   children,
@@ -28,10 +45,29 @@ interface TDProps
   > {
   children?: React.ReactNode;
   className?: string;
+  wrapSprinkles?: Sprinkles;
+  spanType?: "roleOwner" | "roleOther" | "statusApproved" | "statusPending";
 }
 
-export const TD = ({ children, className, ...props }: TDProps) => (
-  <td className={clsx(tableStyles.td, className)}>
-    <div>{children}</div>
-  </td>
-);
+export const TD = ({
+  children,
+  className,
+  spanType,
+  wrapSprinkles,
+  ...props
+}: TDProps) => {
+  const { style: wrapStyle } = rainbowSprinkles({
+    ...wrapSprinkles,
+  });
+  return (
+    <td className={clsx(tableStyles.td, className)}>
+      <div style={wrapStyle}>
+        {spanType ? (
+          <span className={tableStyles[`${spanType}`]}>{children}</span>
+        ) : (
+          children
+        )}
+      </div>
+    </td>
+  );
+};

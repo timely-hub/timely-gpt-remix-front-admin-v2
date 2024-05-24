@@ -35,6 +35,15 @@ const Box = forwardRef<HTMLDivElement, BoxProps>(function Box(
   );
 });
 
+export const Flex = forwardRef<
+  HTMLDivElement,
+  { font?: FontStylesKey } & SprinklesOmit<
+    DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+  >
+>(function Flex({ display = "flex", ...props }, ref) {
+  return <Box display={display} {...props} ref={ref} />;
+});
+
 export const Div = forwardRef<
   HTMLDivElement,
   { font?: FontStylesKey } & SprinklesOmit<
@@ -58,6 +67,32 @@ export const Div = forwardRef<
     >
       {children}
     </div>
+  );
+});
+
+export const Span = forwardRef<
+  HTMLSpanElement,
+  { font?: FontStylesKey } & SprinklesOmit<
+    DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
+  >
+>(function Box({ font, className, ...props }, ref) {
+  const {
+    className: rcn,
+    style,
+    otherProps,
+  } = rainbowSprinkles({
+    ...props,
+  });
+  const { children } = otherProps;
+  return (
+    <span
+      ref={ref}
+      className={clsx(className, font ? fontStyles[font] : "", rcn)}
+      style={style}
+      {...otherProps}
+    >
+      {children}
+    </span>
   );
 });
 

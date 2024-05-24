@@ -2,13 +2,13 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import Buttons from "~/components/Box/Buttons";
 import { loader } from "~/routes/_index";
-import { MemberType, PromptType, SpaceType } from "~/types/shared.types";
+import { spaceRoleLabel } from "~/types/enum.types";
 import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 import Box from "../Box";
-import { TD, TH } from "../Box/Table";
+import { TD, TH, Table } from "../Box/Table";
 import { dashboardStyle } from "./styles.css";
-import { TotalCountProps } from "./types";
+import { MemberType, PromptType, SpaceType, TotalCountProps } from "./types";
 
 export default function Dashboard() {
   const response = useLoaderData<typeof loader>();
@@ -37,7 +37,7 @@ export default function Dashboard() {
     }
   }, [response]);
   return (
-    <div className={dashboardStyle.container}>
+    <>
       <Box
         display={"flex"}
         alignItems={"center"}
@@ -85,50 +85,40 @@ export default function Dashboard() {
       </Box>
       <div>
         <p className={dashboardStyle.boxTitle}>인기 프롬프트</p>
-        <table className={dashboardStyle.tableBorderBottom}>
+        <Table>
           <thead>
             <tr>
-              <TH className={dashboardStyle.thBorderBottom}>프롬프트 명</TH>
-              <TH className={dashboardStyle.thBorderBottom}>설명</TH>
-              <TH className={dashboardStyle.thBorderBottom}>카테고리</TH>
-              <TH className={dashboardStyle.thBorderBottom}>조회수</TH>
-              <TH className={dashboardStyle.thBorderBottom}>요청수</TH>
-              <TH className={dashboardStyle.thBorderBottom}>생성일</TH>
+              <TH>프롬프트 명</TH>
+              <TH>설명</TH>
+              <TH>카테고리</TH>
+              <TH>조회수</TH>
+              <TH>요청수</TH>
+              <TH>생성일</TH>
             </tr>
           </thead>
           <tbody>
             {bestPromptData?.map((data, index) => {
               return (
                 <tr key={index}>
-                  <TD className={dashboardStyle.tdBorderNone}>
+                  <TD>
                     <Link className={dashboardStyle.tdLink} to="#">
                       {data.name}
                     </Link>
                   </TD>
-                  <TD className={dashboardStyle.tdBorderNone}>
-                    {data.description}
-                  </TD>
-                  <TD className={dashboardStyle.tdBorderNone}>
-                    {data.categoryLabel}
-                  </TD>
-                  <TD className={dashboardStyle.tdBorderNone}>
-                    {data.viewCount}
-                  </TD>
-                  <TD className={dashboardStyle.tdBorderNone}>
-                    {data.executeCount}
-                  </TD>
-                  <TD className={dashboardStyle.tdBorderNone}>
-                    {dayJsFormatter(data.createdAt)}
-                  </TD>
+                  <TD>{data.description}</TD>
+                  <TD>{data.categoryLabel}</TD>
+                  <TD>{data.viewCount}</TD>
+                  <TD>{data.executeCount}</TD>
+                  <TD>{dayJsFormatter(data.createdAt)}</TD>
                 </tr>
               );
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
       <div>
         <p className={dashboardStyle.boxTitle}>최근 가입 유저</p>
-        <table className={dashboardStyle.table}>
+        <Table>
           <thead>
             <tr>
               <TH>이름</TH>
@@ -146,18 +136,28 @@ export default function Dashboard() {
                   <TD>{data.name}</TD>
                   <TD>{data.email}</TD>
                   <TD>{data.spaceName}</TD>
-                  <TD>{data.spaceRoleType}</TD>
+                  <TD
+                    spanType={
+                      data?.spaceRoleType === "ROLE_SPACE_OWNER"
+                        ? "roleOwner"
+                        : "roleOther"
+                    }
+                  >
+                    {data?.spaceRoleType
+                      ? spaceRoleLabel[data.spaceRoleType]
+                      : "-"}
+                  </TD>
                   <TD>{thousand(data.executeCount)}</TD>
                   <TD>{dayJsFormatter(data.createdAt)}</TD>
                 </tr>
               );
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
       <div>
         <p className={dashboardStyle.boxTitle}>최근 생성된 스페이스</p>
-        <table className={dashboardStyle.table}>
+        <Table>
           <thead>
             <tr>
               <TH>스페이스 명</TH>
@@ -188,11 +188,11 @@ export default function Dashboard() {
               );
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
       <div>
         <p className={dashboardStyle.boxTitle}>최근 생성된 프롬프트</p>
-        <table className={dashboardStyle.table}>
+        <Table>
           <thead>
             <tr>
               <TH>프롬프트 명</TH>
@@ -215,8 +215,8 @@ export default function Dashboard() {
               );
             })}
           </tbody>
-        </table>
+        </Table>
       </div>
-    </div>
+    </>
   );
 }

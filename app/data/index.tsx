@@ -1,104 +1,89 @@
-export const promptTableData = [
-  {
-    promptName: "aa",
-    description: "bb",
-    category: "cc",
-    view: 123,
-    request: 123,
-    createAt: "2021-01-01",
-    recentRequestAt: "2021-01-01",
-  },
-  {
-    promptName: "aa",
-    description: "bb",
-    category: "cc",
-    view: 123,
-    request: 123,
-    createAt: "2021-01-01",
-    recentRequestAt: "2021-01-01",
-  },
-  {
-    promptName: "aa",
-    description: "bb",
-    category: "cc",
-    view: 123,
-    request: 123,
-    createAt: "2021-01-01",
-    recentRequestAt: "2021-01-01",
-  },
-];
+import { faker } from "@faker-js/faker";
+import { ColumnSort, SortingState } from "@tanstack/react-table";
 
-export const recentUserTableData = [
-  {
-    name: "aa",
-    email: "bb",
-    space: "cc",
-    type: "dd",
-    connectCount: 123,
-    requestCount: 123,
-    signInAt: "2021-01-01",
-  },
-  {
-    name: "aa",
-    email: "bb",
-    space: "cc",
-    type: "dd",
-    connectCount: 123,
-    requestCount: 123,
-    signInAt: "2021-01-01",
-  },
-];
+export type Person = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  age: number;
+  visits: number;
+  progress: number;
+  status: "relationship" | "complicated" | "single";
+  createdAt: Date;
+};
 
-export const spaceTableData = [
-  {
-    space: "aa",
-    domain: "bb",
-    memberCount: 123,
-    promptCount: 123,
-    totalToken: 123,
-    totalUseToken: 123,
-    remainingToken: 22,
-    user: "aa",
-    createAt: "2021-01-01",
-    expirationDate: "2021-02-01",
-  },
-  {
-    space: "aa",
-    domain: "bb",
-    memberCount: 123,
-    promptCount: 123,
-    totalToken: 123,
-    totalUseToken: 123,
-    remainingToken: 22,
-    user: "bb",
-    createAt: "2021-01-01",
-    expirationDate: "2021-02-01",
-  },
-];
+export type PersonApiResponse = {
+  data: Person[];
+  meta: {
+    totalRowCount: number;
+  };
+};
 
-export const recentCreatePromptTableData = [
-  {
-    promptName: "aa",
-    category: "cc",
-    view: 123,
-    request: 123,
-    createAt: "2021-01-01",
-    recentRequestAt: "2021-01-01",
-  },
-  {
-    promptName: "aa",
-    category: "cc",
-    view: 123,
-    request: 123,
-    createAt: "2021-01-01",
-    recentRequestAt: "2021-01-01",
-  },
-  {
-    promptName: "aa",
-    category: "cc",
-    view: 123,
-    request: 123,
-    createAt: "2021-01-01",
-    recentRequestAt: "2021-01-01",
-  },
-];
+const range = (len: number) => {
+  const arr: number[] = [];
+  for (let i = 0; i < len; i++) {
+    arr.push(i);
+  }
+  return arr;
+};
+
+const newPerson = (index: number): Person => {
+  return {
+    id: index + 1,
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    age: faker.number.int(40),
+    visits: faker.number.int(1000),
+    progress: faker.number.int(100),
+    createdAt: faker.date.anytime(),
+    status: faker.helpers.shuffle<Person["status"]>([
+      "relationship",
+      "complicated",
+      "single",
+    ])[0]!,
+  };
+};
+
+export function makeData(...lens: number[]) {
+  const makeDataLevel = (depth = 0): Person[] => {
+    const len = lens[depth]!;
+    return range(len).map((d): Person => {
+      return {
+        ...newPerson(d),
+      };
+    });
+  };
+
+  return makeDataLevel();
+}
+
+const data = makeData(1000);
+
+//simulates a backend api
+export const fetchData = async (
+  start: number,
+  size: number,
+  sorting: SortingState
+) => {
+  const dbData = [...data];
+  if (sorting.length) {
+    const sort = sorting[0] as ColumnSort;
+    const { id, desc } = sort as { id: keyof Person; desc: boolean };
+    dbData.sort((a, b) => {
+      if (desc) {
+        return a[id] < b[id] ? 1 : -1;
+      }
+      return a[id] > b[id] ? 1 : -1;
+    });
+  }
+
+  //simulate a backend api
+  await new Promise((resolve) => setTimeout(resolve, 200));
+
+  return {
+    data: dbData.slice(start, start + size),
+    meta: {
+      totalRowCount: dbData.length,
+    },
+  };
+};

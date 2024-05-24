@@ -1,3 +1,14 @@
+export interface CursorResponse<T> {
+  list: T[];
+  paging: {
+    keyword: string;
+    cursor: number | null;
+    take: number;
+    order: "ASC" | "DESC";
+    basis: string;
+  };
+}
+
 export type ApiResponseType<T> =
   | {
       success: true;
