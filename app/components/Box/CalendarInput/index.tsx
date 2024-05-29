@@ -8,8 +8,8 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import SvgCalendar from "~/assets/icons/Calendar.svg";
-import SvgCaretDown from "~/assets/icons/CaretDown.svg";
+import SvgCalendar from "~/assets/icons/Calendar.svg?react";
+import SvgCaretDown from "~/assets/icons/CaretDown.svg?react";
 import {
   SprinklesOmit,
   rainbowSprinkles,

@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import SpaceStatistics from "~/components/Statistics/SpaceStatistics";
+import { getSpaceInfo } from "~/services/space-controller/get-space-info.$id.server";
 import {
   getSpaceStatsNewMemberById,
   getSpaceStatsNewPromptById,
@@ -14,6 +15,7 @@ import { getQueryParams } from "~/utils/helpers";
 export const loader = async (args: LoaderFunctionArgs) => {
   const searchParams = new URL(args.request.url).searchParams;
   const { id } = args.params;
+  const spaceInfo = await getSpaceInfo(args)(id || "");
   const currentParams = getQueryParams(
     searchParams,
     spaceStatisticsListQueryDefault
@@ -40,6 +42,8 @@ export const loader = async (args: LoaderFunctionArgs) => {
     statsRecentMember: statsRecentMember.data ?? null,
     statsRecentPrompt: statsRecentPrompt.data ?? null,
     tokenUsage: tokenUsage.data ?? null,
+    spaceId: id,
+    spaceInfo: spaceInfo?.data,
   };
 };
 

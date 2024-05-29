@@ -1,31 +1,55 @@
-import { useParams } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useMemo, useRef, useState } from "react";
+import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
 import Search from "~/assets/icons/Search.svg?react";
-import Box from "~/components/Box";
+import Sorting from "~/assets/icons/Sorting.svg?react";
+import Box, { Div, Flex } from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
+import Loading from "~/components/Box/Loading";
 import { TD, TH } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
+import { loader } from "~/routes/statistics.user.$id";
+import { SpaceInfoType } from "~/services/space-controller/get-space-info.$id.server";
 import {
   SpaceStatisticsMemberListCursorType,
-  UserListCursorQueryParamsType,
-  userListCursorQueryDefault,
+  StatisticsListCursorQueryParamsType,
+  spaceListCursorQueryDefault,
 } from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 
+const columns = [
+  { name: "유저ID", filterName: null },
+  { name: "이름", filterName: null },
+  { name: "이메일", filterName: null },
+  { name: "유저타입", filterName: null },
+  { name: "프롬프트 요청수", filterName: null },
+  { name: "프롬프트 보기", filterName: null },
+];
+
 type QueryParamsType = {
-  userName: string;
+  keyword: string;
+  order: string;
+  basis: string;
 };
 
 const getUserList = async (
   id: string,
-  queryParams: UserListCursorQueryParamsType
+  queryParams: StatisticsListCursorQueryParamsType
 ) => {
-  queryParams = omitUnusedSearchParams(userListCursorQueryDefault, queryParams);
+  queryParams = omitUnusedSearchParams(
+    spaceListCursorQueryDefault,
+    queryParams
+  );
   const parsed = objectToQueryParams({ ...queryParams });
   const res = await fetch(`/api/get-user-statistics-list/${id}?${parsed}`, {
     cache: "no-cache",
@@ -37,11 +61,24 @@ const getUserList = async (
 
 export default function UserStatistics() {
   const { id } = useParams<"id">();
+  const { spaceId, spaceInfo } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+  const location = useLocation();
   const virtuoso = useRef(null);
-  const [parsedQueryParams, setParsedQueryParams] = useState<QueryParamsType>({
-    userName: "",
+  const [queryParams, setQueryParams] = useState<QueryParamsType>({
+    keyword: "",
+    order: "desc",
+    basis: "",
   });
-  const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+  const [parsedQueryParams, setParsedQueryParams] = useState<QueryParamsType>({
+    keyword: "",
+    order: "desc",
+    basis: "",
+  });
+  const [spaceInfoData, setSpaceInfoData] = useState<SpaceInfoType>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } =
     useInfiniteQuery({
       queryKey: ["/user/list", id, parsedQueryParams],
       queryFn: async ({ pageParam }) => {
@@ -49,7 +86,7 @@ export default function UserStatistics() {
           cursor: pageParam?.toString() || "",
           ...parsedQueryParams,
         });
-        console.log(res);
+        setLoading(false);
         return res;
       },
       initialPageParam: null as number | null,
@@ -70,27 +107,93 @@ export default function UserStatistics() {
     ) ?? []) as number[];
     return groupCounts.reduce((acc, cur) => acc + cur, 0);
   }, [data]);
+
+  const handleSubmit = async (
+    e?: FormEvent<HTMLFormElement>,
+    newQueryParams?: QueryParamsType
+  ) => {
+    e?.preventDefault();
+    const clonedQueryParams = newQueryParams ?? queryParams;
+    if (newQueryParams) setQueryParams(clonedQueryParams);
+    setParsedQueryParams({
+      ...clonedQueryParams,
+    });
+  };
+
+  const handleFiltering = (name: string) => {
+    setParsedQueryParams((prev) => ({
+      ...prev,
+      basis: name,
+      order: prev.order === "desc" ? "asc" : "desc",
+    }));
+  };
+
+  useMemo(() => {
+    if (!spaceInfo) return;
+    setSpaceInfoData(spaceInfo);
+  }, [spaceInfo]);
   return (
     <>
+      {loading && <Loading />}
       <Box
         display={"flex"}
         alignItems={"center"}
         justifyContent={"space-between"}
         marginBottom={"16px"}
       >
-        <p className={statisticsSpaceStyle.title}>헤이GPT 유저 통계</p>
-        <Buttons>전체 업데이트</Buttons>
+        <p className={statisticsSpaceStyle.title}>
+          {spaceInfoData?.name} 유저 통계
+        </p>
+        <Buttons
+          onClick={() => {
+            refetch();
+            setLoading(true);
+          }}
+        >
+          전체 업데이트
+        </Buttons>
       </Box>
-      <TextInput
-        placeholder={"검색어를 입력해주세요."}
-        wrapSprinkles={{ width: "100%", marginBottom: "16px" }}
-        suffix={
-          <Buttons backgroundColor={"none"} type="submit">
-            <Search />
+      <Form ref={formRef} onSubmit={handleSubmit}>
+        <TextInput
+          placeholder={"검색어를 입력해주세요."}
+          wrapSprinkles={{ width: "100%", marginBottom: "16px" }}
+          onChange={(e) => {
+            setQueryParams((prev) => ({
+              ...prev,
+              keyword: e.target.value,
+            }));
+          }}
+          suffix={
+            <Buttons backgroundColor={"none"} type="submit">
+              <Search />
+            </Buttons>
+          }
+        />
+      </Form>
+      <Flex marginBottom={"16px"}>
+        <p className={statisticsSpaceStyle.subTitle}>전체 유저 통계</p>
+        <Div marginLeft={"auto"} display={"inherit"} gap={"4px"}>
+          <Buttons
+            backgroundColor={vars.colors["Primary/Primary 50"]}
+            color={vars.colors["Primary/Primary 500"]}
+            onClick={() => {
+              navigate(`/statistics/space/${spaceId}`);
+            }}
+          >
+            스페이스 통계 보기
           </Buttons>
-        }
-      />
-      <div>
+          <Buttons
+            backgroundColor={vars.colors["Primary/Primary 50"]}
+            color={vars.colors["Primary/Primary 500"]}
+            onClick={() => {
+              navigate(`/statistics/prompt/${spaceId}`);
+            }}
+          >
+            생성된 프롬프트 통계 보기
+          </Buttons>
+        </Div>
+      </Flex>
+      <div className={loading ? statisticsSpaceStyle.loading : ""}>
         <TableVirtuoso
           style={{
             height: "400px",
@@ -114,12 +217,19 @@ export default function UserStatistics() {
           fixedHeaderContent={() => {
             return (
               <tr>
-                <TH>유저ID</TH>
-                <TH>이름</TH>
-                <TH>이메일</TH>
-                <TH>유저타입</TH>
-                <TH>프롬프트 요청수</TH>
-                <TH>프롬프트 보기</TH>
+                {columns.map((column) => (
+                  <TH theme="flex" key={column.name}>
+                    {column.name}
+                    {column.filterName && (
+                      <Sorting
+                        cursor={"pointer"}
+                        onClick={() => {
+                          handleFiltering(column.filterName);
+                        }}
+                      />
+                    )}
+                  </TH>
+                ))}
               </tr>
             );
           }}
@@ -130,7 +240,7 @@ export default function UserStatistics() {
                 <TD>{item.memberName}</TD>
                 <TD>{item.memberEmail}</TD>
                 <TD>{item.roleType}</TD>
-                <TD>{item.promptCount}</TD>
+                <TD>{item.executeCount}</TD>
                 <TD wrapSprinkles={{ display: "flex" }}>
                   {item.promptIdList?.length}개
                 </TD>

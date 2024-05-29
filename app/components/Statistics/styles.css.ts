@@ -17,4 +17,13 @@ export const statisticsSpaceStyle = appStyles({
     tableLayout: "fixed",
     marginBottom: "24px",
   },
+  subTitle: {
+    ...getTextStyles("Grayscale/Black", "Title/24px/24px.700"),
+  },
+  loading: {
+    opacity: 0.5,
+  },
+  load: {
+    opacity: 1,
+  },
 });

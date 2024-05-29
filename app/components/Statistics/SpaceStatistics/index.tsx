@@ -1,29 +1,65 @@
-import { useLoaderData } from "@remix-run/react";
-import { useEffect, useState } from "react";
-import Box, { Flex } from "~/components/Box";
+import {
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useRevalidator,
+} from "@remix-run/react";
+import { useEffect, useMemo, useState } from "react";
+import Sorting from "~/assets/icons/Sorting.svg?react";
+import Box, { Div, Flex } from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
+import Loading from "~/components/Box/Loading";
 import { TD, TH, Table } from "~/components/Box/Table";
 import { loader } from "~/routes/statistics.space.$id";
+import { SpaceInfoType } from "~/services/space-controller/get-space-info.$id.server";
 import {
   SpaceStatisticsMemberListCursorType,
-  SpaceStatisticsPromptListType,
+  SpaceStatisticsPromptListCursorType,
   SpaceStatisticsTokenUsageType,
 } from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { vars } from "~/styles/vars.css";
+import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 import { recentStatisticsStyle } from "./styles.css";
 
-export default function SpaceStatistics() {
-  const { statsRecentMember, statsRecentPrompt, tokenUsage } =
-    useLoaderData<typeof loader>();
+const recentUserColumn = [
+  { name: "이름", filterName: null },
+  { name: "유저ID", filterName: null },
+  { name: "이메일", filterName: null },
+  { name: "스페이스 가입일", filterName: null },
+];
 
+const recentPromptColumn = [
+  { name: "유저ID", filterName: null },
+  { name: "프롬프트ID", filterName: null },
+  { name: "이름", filterName: null },
+  { name: "설명", filterName: null },
+  { name: "카테고리", filterName: null },
+  { name: "생성일", filterName: "createdAt" },
+  { name: "조회수", filterName: "viewCount" },
+  { name: "요청수", filterName: "executeCount" },
+];
+
+export default function SpaceStatistics() {
+  const revalidator = useRevalidator();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {
+    statsRecentMember,
+    statsRecentPrompt,
+    tokenUsage,
+    spaceId,
+    spaceInfo,
+  } = useLoaderData<typeof loader>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [statsRecentMemberData, setStatsRecentMemberData] =
     useState<SpaceStatisticsMemberListCursorType[]>();
   const [statsRecentPromptData, setStatsRecentPromptData] =
-    useState<SpaceStatisticsPromptListType[]>();
+    useState<SpaceStatisticsPromptListCursorType[]>();
   const [tokenUsageData, setTokenUsageData] =
     useState<SpaceStatisticsTokenUsageType>();
+  const [spaceInfoData, setSpaceInfoData] = useState<SpaceInfoType>();
 
   useEffect(() => {
     if (!statsRecentMember || !statsRecentPrompt || !tokenUsage) return;
@@ -37,21 +73,64 @@ export default function SpaceStatistics() {
       setTokenUsageData(tokenUsage);
     }
   }, [statsRecentMember, statsRecentPrompt, tokenUsage]);
+
+  useMemo(() => {
+    if (!spaceInfo) return;
+    setSpaceInfoData(spaceInfo);
+  }, [spaceInfo]);
   return (
     <>
+      {loading && <Loading />}
       <Flex
         alignItems={"center"}
         justifyContent={"space-between"}
         marginBottom={"16px"}
       >
-        <p className={statisticsSpaceStyle.title}>스페이스 선택</p>
-        <Buttons>전체 업데이트</Buttons>
+        <p className={statisticsSpaceStyle.title}>
+          {spaceInfoData?.name} 스페이스 통계
+        </p>
+        <Buttons
+          onClick={() => {
+            revalidator.revalidate();
+            if (revalidator.state === "loading") {
+              setLoading(true);
+            } else {
+              setLoading(false);
+            }
+          }}
+        >
+          전체 업데이트
+        </Buttons>
+      </Flex>
+      <Flex marginBottom={"16px"}>
+        <p className={statisticsSpaceStyle.subTitle}>통계 내역</p>
+        <Div marginLeft={"auto"} display={"inherit"} gap={"4px"}>
+          <Buttons
+            backgroundColor={vars.colors["Primary/Primary 50"]}
+            color={vars.colors["Primary/Primary 500"]}
+            onClick={() => {
+              navigate(`/statistics/user/${spaceId}`);
+            }}
+          >
+            유저 통계 보기
+          </Buttons>
+          <Buttons
+            backgroundColor={vars.colors["Primary/Primary 50"]}
+            color={vars.colors["Primary/Primary 500"]}
+            onClick={() => {
+              navigate(`/statistics/prompt/${spaceId}`);
+            }}
+          >
+            생성된 프롬프트 통계 보기
+          </Buttons>
+        </Div>
       </Flex>
       <Box
         padding={"24px"}
         borderRadius={"16px"}
         border={`1px solid ${vars.colors["Grayscale/Gray 100"]}`}
         marginBottom={"16px"}
+        className={loading ? statisticsSpaceStyle.loading : ""}
       >
         <p className={recentStatisticsStyle.statisticsTitle}>
           최근 가입 유저 (최근 10개)
@@ -59,10 +138,9 @@ export default function SpaceStatistics() {
         <Table>
           <thead>
             <tr>
-              <TH>이름</TH>
-              <TH>유저ID</TH>
-              <TH>이메일</TH>
-              <TH>스페이스 가입일</TH>
+              {recentUserColumn.map((column, index) => {
+                return <TH key={index}>{column.name}</TH>;
+              })}
             </tr>
           </thead>
           <tbody>
@@ -72,7 +150,7 @@ export default function SpaceStatistics() {
                   <TD>{member.memberName}</TD>
                   <TD>{member.id}</TD>
                   <TD>{member.memberEmail}</TD>
-                  <TD>{member.createdAt}</TD>
+                  <TD>{dayJsFormatter(member.createdAt)}</TD>
                 </tr>
               );
             })}
@@ -84,6 +162,7 @@ export default function SpaceStatistics() {
         borderRadius={"16px"}
         border={`1px solid ${vars.colors["Grayscale/Gray 100"]}`}
         marginBottom={"16px"}
+        className={loading ? statisticsSpaceStyle.loading : ""}
       >
         <p className={recentStatisticsStyle.statisticsTitle}>
           최근 생성된 프롬프트 (최근 10개)
@@ -91,32 +170,43 @@ export default function SpaceStatistics() {
         <Table>
           <thead>
             <tr>
-              <TH>프롬프트 명</TH>
-              <TH>카테고리</TH>
-              <TH>조회수</TH>
-              <TH>요청수</TH>
-              <TH>생성일</TH>
+              {recentPromptColumn.map((column) => (
+                <TH theme="flex" key={column.name}>
+                  {column.name}
+                  {column.filterName && (
+                    <Sorting
+                      cursor={"pointer"}
+                      onClick={() => {
+                        // TODO: sort
+                      }}
+                    />
+                  )}
+                </TH>
+              ))}
             </tr>
           </thead>
           <tbody>
             {statsRecentPromptData?.map((prompt, index) => {
               return (
                 <tr key={index}>
+                  <TD>{prompt.authorId}</TD>
+                  <TD>{prompt.promptId}</TD>
                   <TD>{prompt.name}</TD>
+                  <TD>{prompt.description}</TD>
                   <TD>{prompt.categoryLabel}</TD>
+                  <TD>{dayJsFormatter(prompt.createdAt)}</TD>
                   <TD>{prompt.viewCount}</TD>
                   <TD>{prompt.executeCount}</TD>
-                  <TD>{prompt.createdAt}</TD>
                 </tr>
               );
             })}
           </tbody>
         </Table>
       </Box>
-      <Box>
+      <Box className={loading ? statisticsSpaceStyle.loading : ""}>
         <Flex>
           <p className={recentStatisticsStyle.statisticsTitle}>
-            최근 생성된 프롬프트 (최근 10개)
+            월별 토큰 사용량
           </p>
         </Flex>
         <Flex gap={"8px"} display={"flex"} marginBottom={"32px"}>

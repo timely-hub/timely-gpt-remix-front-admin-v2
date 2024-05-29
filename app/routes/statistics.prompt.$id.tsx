@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import UserStatistics from "~/components/Statistics/UserStatistics";
+import PromptStatistics from "~/components/Statistics/PromptStatistics";
 import { getSpaceInfo } from "~/services/space-controller/get-space-info.$id.server";
 
 export const loader = async (args: LoaderFunctionArgs) => {
@@ -11,6 +11,6 @@ export const loader = async (args: LoaderFunctionArgs) => {
   };
 };
 
-export default function UserStatisticsPage() {
-  return <UserStatistics />;
+export default function PromptStatisticsPage() {
+  return <PromptStatistics />;
 }

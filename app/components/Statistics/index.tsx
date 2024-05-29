@@ -1,27 +1,50 @@
-import { useLocation, useNavigate } from "@remix-run/react";
+import { Form, useLocation, useNavigate } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useMemo, useRef, useState } from "react";
+import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
 import Search from "~/assets/icons/Search.svg?react";
+import Sorting from "~/assets/icons/Sorting.svg?react";
 import {
-  SpaceListCursorQueryParamsType,
   SpaceListCursorType,
+  StatisticsListCursorQueryParamsType,
   spaceListCursorQueryDefault,
 } from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
-import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
+import { dayJsFormatter } from "~/utils/formatter";
+import {
+  objectToQueryParams,
+  omitUnusedSearchParams,
+  thousand,
+} from "~/utils/helpers";
 import Box from "../Box";
 import Buttons from "../Box/Buttons";
+import Loading from "../Box/Loading";
 import { TD, TH } from "../Box/Table";
 import TextInput from "../Box/TextInput";
 import { statisticsSpaceStyle } from "./styles.css";
 
+const columns = [
+  { name: "스페이스명", filterName: null },
+  { name: "도메인", filterName: null },
+  { name: "멤버 수", filterName: "memberCount" },
+  { name: "프롬프트 수", filterName: "promptCount" },
+  { name: "총 할당 토큰", filterName: null },
+  { name: "총 사용 토큰", filterName: null },
+  { name: "총 남은 토큰", filterName: null },
+  { name: "만료일", filterName: "expiredAt" },
+  { name: "통계보기", filterName: null },
+];
+
 type QueryParamsType = {
-  toolName: string;
+  keyword: string;
+  order: string;
+  basis: string;
 };
 
-const getSpaceList = async (queryParams: SpaceListCursorQueryParamsType) => {
+const getSpaceList = async (
+  queryParams: StatisticsListCursorQueryParamsType
+) => {
   queryParams = omitUnusedSearchParams(
     spaceListCursorQueryDefault,
     queryParams
@@ -39,10 +62,19 @@ export default function Statistics() {
   const pathname = useLocation().pathname;
   const navigate = useNavigate();
   const virtuoso = useRef(null);
-  const [parsedQueryParams, setParsedQueryParams] = useState<QueryParamsType>({
-    toolName: "",
+  const [queryParams, setQueryParams] = useState<QueryParamsType>({
+    keyword: "",
+    order: "desc",
+    basis: "",
   });
-  const { data, isFetchingNextPage, fetchNextPage, hasNextPage } =
+  const [parsedQueryParams, setParsedQueryParams] = useState<QueryParamsType>({
+    keyword: "",
+    order: "desc",
+    basis: "",
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } =
     useInfiniteQuery({
       queryKey: ["/space/list", parsedQueryParams],
       queryFn: async ({ pageParam }) => {
@@ -50,6 +82,7 @@ export default function Statistics() {
           cursor: pageParam?.toString() || "",
           ...parsedQueryParams,
         });
+        setLoading(false);
         return res;
       },
       initialPageParam: null as number | null,
@@ -70,8 +103,30 @@ export default function Statistics() {
     ) ?? []) as number[];
     return groupCounts.reduce((acc, cur) => acc + cur, 0);
   }, [data]);
+
+  const handleSubmit = async (
+    e?: FormEvent<HTMLFormElement>,
+    newQueryParams?: QueryParamsType
+  ) => {
+    e?.preventDefault();
+    const clonedQueryParams = newQueryParams ?? queryParams;
+    if (newQueryParams) setQueryParams(clonedQueryParams);
+    setParsedQueryParams({
+      ...clonedQueryParams,
+    });
+  };
+
+  const handleFiltering = (name: string) => {
+    console.log(name);
+    setParsedQueryParams((prev) => ({
+      ...prev,
+      basis: name,
+      order: prev.order === "desc" ? "asc" : "desc",
+    }));
+  };
   return (
     <>
+      {loading && <Loading />}
       <Box
         display={"flex"}
         alignItems={"center"}
@@ -79,18 +134,33 @@ export default function Statistics() {
         marginBottom={"16px"}
       >
         <p className={statisticsSpaceStyle.title}>스페이스 선택</p>
-        <Buttons>전체 업데이트</Buttons>
+        <Buttons
+          onClick={() => {
+            refetch();
+            setLoading(true);
+          }}
+        >
+          전체 업데이트
+        </Buttons>
       </Box>
-      <TextInput
-        placeholder={"검색어를 입력해주세요."}
-        wrapSprinkles={{ width: "100%", marginBottom: "16px" }}
-        suffix={
-          <Buttons backgroundColor={"none"} type="submit">
-            <Search />
-          </Buttons>
-        }
-      />
-      <div>
+      <Form ref={formRef} onSubmit={handleSubmit}>
+        <TextInput
+          placeholder={"검색어를 입력해주세요."}
+          wrapSprinkles={{ width: "100%", marginBottom: "16px" }}
+          onChange={(e) => {
+            setQueryParams((prev) => ({
+              ...prev,
+              keyword: e.target.value,
+            }));
+          }}
+          suffix={
+            <Buttons backgroundColor={"none"} type="submit">
+              <Search />
+            </Buttons>
+          }
+        />
+      </Form>
+      <div className={loading ? statisticsSpaceStyle.loading : ""}>
         <TableVirtuoso
           style={{
             height: "400px",
@@ -114,15 +184,19 @@ export default function Statistics() {
           fixedHeaderContent={() => {
             return (
               <tr>
-                <TH>스페이스명</TH>
-                <TH>도메인</TH>
-                <TH>멤버 수</TH>
-                <TH>프롬프트 수</TH>
-                <TH>총 할당 토큰</TH>
-                <TH>총 사용 토큰</TH>
-                <TH>총 남은 토큰</TH>
-                <TH>만료일</TH>
-                <TH>통계보기</TH>
+                {columns.map((column) => (
+                  <TH theme="flex" key={column.name}>
+                    {column.name}
+                    {column.filterName && (
+                      <Sorting
+                        cursor={"pointer"}
+                        onClick={() => {
+                          handleFiltering(column.filterName);
+                        }}
+                      />
+                    )}
+                  </TH>
+                ))}
               </tr>
             );
           }}
@@ -133,10 +207,10 @@ export default function Statistics() {
                 <TD>{item?.domain}</TD>
                 <TD>{item?.memberCount}</TD>
                 <TD>{item?.promptCount}</TD>
-                <TD>{item?.credit}</TD>
-                <TD>{item?.usedCredit}</TD>
-                <TD>{item?.usableCredit}</TD>
-                <TD>{item?.expiredAt}</TD>
+                <TD>{thousand(item?.credit)}</TD>
+                <TD>{thousand(item?.usedCredit)}</TD>
+                <TD>{thousand(item?.usableCredit)}</TD>
+                <TD>{dayJsFormatter(item?.expiredAt)}</TD>
                 <TD>
                   <Buttons
                     onClick={() => {

@@ -83,21 +83,8 @@ export const spaceListCursorQueryDefault = {
   basis: "",
 };
 
-export type SpaceListCursorQueryParamsType = Partial<
+export type StatisticsListCursorQueryParamsType = Partial<
   typeof spaceListCursorQueryDefault
->;
-
-export const userListCursorQueryDefault = {
-  id: "",
-  keyword: "",
-  cursor: "",
-  take: "10",
-  order: "asc",
-  basis: "",
-};
-
-export type UserListCursorQueryParamsType = Partial<
-  typeof userListCursorQueryDefault
 >;
 
 export const spaceStatisticsListQueryDefault = {

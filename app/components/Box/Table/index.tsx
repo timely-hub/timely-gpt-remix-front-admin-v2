@@ -5,6 +5,7 @@ import {
   SprinklesOmit,
   rainbowSprinkles,
 } from "~/styles/rainbow-sprinkles.css";
+import { Flex } from "..";
 import { tableStyles } from "./styles.css";
 
 export const Table = ({
@@ -20,18 +21,38 @@ export const Table = ({
   </table>
 );
 
-export const TH = ({
-  children,
-  className,
-  ...props
-}: {
+interface THProps
+  extends SprinklesOmit<
+    Omit<
+      DetailedHTMLProps<
+        HTMLAttributes<HTMLTableCellElement>,
+        HTMLTableCellElement
+      >,
+      "onClick"
+    >
+  > {
   children?: React.ReactNode;
   className?: string;
-}) => (
-  <th className={clsx(className, tableStyles.th)} {...props}>
-    <div>{children}</div>
-  </th>
-);
+  wrapSprinkles?: Sprinkles;
+  theme?: "flex";
+}
+
+export const TH = ({ children, className, theme, wrapSprinkles }: THProps) => {
+  const { style: wrapStyle } = rainbowSprinkles({
+    ...wrapSprinkles,
+  });
+  return (
+    <th style={wrapStyle} className={clsx(className, tableStyles.th)}>
+      {theme === "flex" ? (
+        <Flex alignItems={"center"} justifyContent={"space-between"}>
+          {children}
+        </Flex>
+      ) : (
+        <div>{children}</div>
+      )}
+    </th>
+  );
+};
 
 interface TDProps
   extends SprinklesOmit<
@@ -54,7 +75,6 @@ export const TD = ({
   className,
   spanType,
   wrapSprinkles,
-  ...props
 }: TDProps) => {
   const { style: wrapStyle } = rainbowSprinkles({
     ...wrapSprinkles,

@@ -16,3 +16,22 @@ export const isSpaceRoleValueType = (
 ): arg is SpaceRoleValueType => {
   return Object.values(spaceRoleLabel).includes(arg as SpaceRoleValueType);
 };
+
+export const spaceGradeLabel = {
+  basic: "영업용(체험판)",
+  premium: "베이직",
+  master: "프로",
+};
+
+export type SpaceGradeType = keyof typeof spaceGradeLabel;
+export type SpaceGradeValueType = (typeof spaceGradeLabel)[SpaceGradeType];
+
+export const isSpaceGradeType = (arg: unknown): arg is SpaceGradeType => {
+  return (arg as SpaceGradeType) in spaceGradeLabel;
+};
+
+export const isSpaceGradeValueType = (
+  arg: unknown
+): arg is SpaceGradeValueType => {
+  return Object.values(spaceGradeLabel).includes(arg as SpaceGradeValueType);
+};

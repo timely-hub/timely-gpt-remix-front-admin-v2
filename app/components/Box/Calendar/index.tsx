@@ -6,10 +6,10 @@ import React, {
   forwardRef,
   useMemo,
 } from "react";
-import SvgNext from "~/assets/icons/Next.svg";
-import SvgNextDouble from "~/assets/icons/NextDouble.svg";
-import SvgPrevious from "~/assets/icons/Previous.svg";
-import SvgPreviousDouble from "~/assets/icons/PreviousDouble.svg";
+import SvgNext from "~/assets/icons/Next.svg?react";
+import SvgNextDouble from "~/assets/icons/NextDouble.svg?react";
+import SvgPrevious from "~/assets/icons/Previous.svg?react";
+import SvgPreviousDouble from "~/assets/icons/PreviousDouble.svg?react";
 import {
   SprinklesOmit,
   rainbowSprinkles,

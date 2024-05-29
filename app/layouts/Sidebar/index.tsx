@@ -4,7 +4,7 @@ import Box from "~/components/Box";
 import { SubMenu } from "./SubMenu";
 import { adminManagementLayoutStyles, adminPageSideStyle } from "./styles.css";
 
-const AdminPageMenus = [
+const adminPageMenus = [
   {
     id: 0,
     title: "스페이스 통계",
@@ -111,7 +111,7 @@ export default function AdminManagementLayout({
                 대시보드
               </span>
             </Link>
-            {AdminPageMenus.map((item) => {
+            {adminPageMenus.map((item) => {
               return <SubMenu item={item} key={item.id} />;
             })}
           </Box>

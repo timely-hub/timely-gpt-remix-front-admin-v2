@@ -3,14 +3,14 @@ import { CursorResponse } from "~/types/api";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import {
-  SpaceListCursorQueryParamsType,
   SpaceListCursorType,
+  StatisticsListCursorQueryParamsType,
   spaceListCursorQueryDefault,
 } from "./space-statistics-controller.types";
 
 export const getSpaceStatisticsList =
   (args: LoaderFunctionArgs) =>
-  async (queryParams: SpaceListCursorQueryParamsType) => {
+  async (queryParams: StatisticsListCursorQueryParamsType) => {
     queryParams = omitUnusedSearchParams(
       spaceListCursorQueryDefault,
       queryParams
