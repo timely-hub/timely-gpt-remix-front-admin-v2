@@ -7,5 +7,6 @@ export default async function getDashboard(args: LoaderFunctionArgs) {
   const response = await fetcher<DashBoardType>("/admin/dashboard", {
     cache: "no-cache",
   });
+  console.log(response)
   return response;
 }

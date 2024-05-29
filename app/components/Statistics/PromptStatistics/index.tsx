@@ -10,16 +10,12 @@ import Loading from "~/components/Box/Loading";
 import { TD, TH } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
 import { loader } from "~/routes/statistics.prompt.$id";
-import { SpaceInfoType } from "~/services/space-controller/get-space-info.$id.server";
-import {
-  SpaceStatisticsPromptListCursorType,
-  StatisticsListCursorQueryParamsType,
-  spaceListCursorQueryDefault,
-} from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
+import { SpaceStatisticsPromptListCursorType, StatisticsListCursorQueryParamsType, spaceListCursorQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-info.$id.server";
 
 const columns = [
   { name: "프롬프트ID", filterName: null },

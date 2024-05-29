@@ -1,3 +1,4 @@
+import { de } from "@faker-js/faker";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { getUserToken } from "~/.server/session";
 import { ApiResponseType } from "~/types/api";
@@ -139,11 +140,14 @@ const fetcherFunction =
       },
     };
     if (!configs?.disableToken) {
-      const accessToken = fetcherConfigs.accessToken ?? null;
+      const accessToken =
+        fetcherConfigs.accessToken ??
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZjMyMWRiZS1kMTQ3LTRiNGEtYmI1Yi1jNTc4M2JjZDViZTEiLCJybCI6IlJPTEVfQURNSU4iLCJ0IjoiQSIsImlhdCI6MTcxNjc3OTI3NywiZXhwIjoxNzQ4MzE1Mjc3LCJpc3MiOiJ0aW1lbHlncHQifQ.uR51tQpUpSUUu5zDAgShV_WEI5K7OYgCyHTXSTjlaKA";
       defaultOptions.headers = {
         ...defaultOptions.headers,
         Authorization: `Bearer ${accessToken}`,
       };
+      console.log(defaultOptions.headers);
     }
     if (restOptions) {
       defaultOptions = {

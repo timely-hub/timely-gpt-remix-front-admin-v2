@@ -35,7 +35,7 @@ const adminPageMenus = [
       {
         id: 0,
         title: "스페이스 생성",
-        href: "/space/create",
+        href: "/space/create/required-info",
       },
       {
         id: 1,
@@ -74,6 +74,29 @@ const adminPageMenus = [
   },
 ];
 
+const adminRightSideMenus = [
+  {
+    id: 0,
+    title: "필수 정보 입력",
+    href: "/space/create/required-info",
+  },
+  {
+    id: 1,
+    title: "프롬프트 꾸러미 선택",
+    href: "/space/create/prompt-package",
+  },
+  {
+    id: 2,
+    title: "추천 프롬프트 선택",
+    href: "/space/create/prompt-recommend",
+  },
+  {
+    id: 3,
+    title: "생성 완료",
+    href: "/space/create/complete",
+  },
+];
+
 interface AdminManagementLayoutProps {
   children: React.ReactNode;
 }
@@ -82,7 +105,7 @@ export default function AdminManagementLayout({
   children,
 }: AdminManagementLayoutProps) {
   const pathname = useLocation().pathname;
-
+  console.log(pathname);
   return (
     <Box className={adminManagementLayoutStyles.wrap}>
       <Box className={adminManagementLayoutStyles.header}>
@@ -120,7 +143,32 @@ export default function AdminManagementLayout({
           <Box padding={"32px 24px"}>{children}</Box>
         </Box>
         {pathname !== "/" ? (
-          <Box className={adminManagementLayoutStyles.endSide}></Box>
+          <Box className={adminManagementLayoutStyles.endSide}>
+            {pathname.startsWith("/space/create") ? (
+              <Box className={adminPageSideStyle.rightSideWrap}>
+                {adminRightSideMenus.map((item) => {
+                  return (
+                    <Link
+                      to={item.href}
+                      className={adminPageSideStyle.rightMenuLink}
+                      key={item.id}
+                    >
+                      <span
+                        className={clsx(
+                          adminPageSideStyle.submenuTitle,
+                          pathname === item.href
+                            ? adminPageSideStyle.subMenuSelected
+                            : null
+                        )}
+                      >
+                        {item.title}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </Box>
+            ) : null}
+          </Box>
         ) : null}
       </Box>
     </Box>

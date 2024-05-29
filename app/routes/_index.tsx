@@ -1,6 +1,6 @@
 import { type LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import getDashboard from "~/Services/dashboard-controller/get-dashboard.server";
 import Dashboard from "~/components/Dashboard/index";
-import getDashboard from "~/services/dashboard-controller/get-dashboard.server";
 
 export const meta: MetaFunction = () => {
   return [

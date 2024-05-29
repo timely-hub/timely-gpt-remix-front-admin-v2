@@ -16,16 +16,12 @@ import Loading from "~/components/Box/Loading";
 import { TD, TH } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
 import { loader } from "~/routes/statistics.user.$id";
-import { SpaceInfoType } from "~/services/space-controller/get-space-info.$id.server";
-import {
-  SpaceStatisticsMemberListCursorType,
-  StatisticsListCursorQueryParamsType,
-  spaceListCursorQueryDefault,
-} from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
+import { SpaceStatisticsMemberListCursorType, StatisticsListCursorQueryParamsType, spaceListCursorQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-info.$id.server";
 
 const columns = [
   { name: "유저ID", filterName: null },
@@ -224,7 +220,9 @@ export default function UserStatistics() {
                       <Sorting
                         cursor={"pointer"}
                         onClick={() => {
-                          handleFiltering(column.filterName);
+                          if (column.filterName) {
+                            handleFiltering(column.filterName);
+                          }
                         }}
                       />
                     )}

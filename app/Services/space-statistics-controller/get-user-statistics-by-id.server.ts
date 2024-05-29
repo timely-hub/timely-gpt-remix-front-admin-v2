@@ -3,7 +3,7 @@ import {
   SpaceStatisticsMemberListCursorType,
   StatisticsListCursorQueryParamsType,
   spaceListCursorQueryDefault,
-} from "~/services/space-statistics-controller/space-statistics-controller.types";
+} from "./space-statistics-controller.types";
 import { CursorResponse } from "~/types/api";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";

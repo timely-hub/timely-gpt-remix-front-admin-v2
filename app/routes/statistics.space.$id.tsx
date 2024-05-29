@@ -1,15 +1,8 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { getSpaceInfo } from "~/Services/space-controller/get-space-info.$id.server";
+import { getSpaceStatsNewMemberById, getSpaceStatsNewPromptById, getSpaceStatsTokenUsage } from "~/Services/space-statistics-controller/get-space-statistics-by-id.server";
+import { spaceStatisticsListQueryDefault, spaceStatisticsTokenUsageQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import SpaceStatistics from "~/components/Statistics/SpaceStatistics";
-import { getSpaceInfo } from "~/services/space-controller/get-space-info.$id.server";
-import {
-  getSpaceStatsNewMemberById,
-  getSpaceStatsNewPromptById,
-  getSpaceStatsTokenUsage,
-} from "~/services/space-statistics-controller/get-space-statistics-by-id.server";
-import {
-  spaceStatisticsListQueryDefault,
-  spaceStatisticsTokenUsageQueryDefault,
-} from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { getQueryParams } from "~/utils/helpers";
 
 export const loader = async (args: LoaderFunctionArgs) => {

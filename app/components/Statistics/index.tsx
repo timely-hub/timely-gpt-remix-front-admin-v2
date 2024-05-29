@@ -4,11 +4,6 @@ import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
 import Search from "~/assets/icons/Search.svg?react";
 import Sorting from "~/assets/icons/Sorting.svg?react";
-import {
-  SpaceListCursorType,
-  StatisticsListCursorQueryParamsType,
-  spaceListCursorQueryDefault,
-} from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { dayJsFormatter } from "~/utils/formatter";
@@ -23,6 +18,7 @@ import Loading from "../Box/Loading";
 import { TD, TH } from "../Box/Table";
 import TextInput from "../Box/TextInput";
 import { statisticsSpaceStyle } from "./styles.css";
+import { SpaceListCursorType, StatisticsListCursorQueryParamsType, spaceListCursorQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
 
 const columns = [
   { name: "스페이스명", filterName: null },

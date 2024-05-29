@@ -69,7 +69,7 @@ export const adminManagementLayoutStyles = appStyles({
     minHeight: "100vh",
     minWidth: "316px",
     maxWidth: "316px",
-    borderRight: `1px solid ${vars.colors["Grayscale/Gray 200"]}`,
+    borderLeft: `1px solid ${vars.colors["Grayscale/Gray 100"]}`,
     backgroundColor: vars.colors["Grayscale/White"],
   },
   main: {
@@ -97,6 +97,13 @@ export const adminPageSideStyle = appStyles({
     display: "flex",
     flexDirection: "column",
     padding: "16px 8px",
+    cursor: "pointer",
+    textDecoration: "none",
+  },
+  rightMenuLink: {
+    display: "flex",
+    flexDirection: "column",
+    padding: "8px 16px",
     cursor: "pointer",
     textDecoration: "none",
   },
@@ -149,5 +156,11 @@ export const adminPageSideStyle = appStyles({
   },
   hidden: {
     display: "none",
+  },
+  rightSideWrap: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+    padding: "32px 16px",
   },
 });

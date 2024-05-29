@@ -1,12 +1,8 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import {
-  SpaceStatisticsPromptListCursorType,
-  StatisticsListCursorQueryParamsType,
-  spaceListCursorQueryDefault,
-} from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { CursorResponse } from "~/types/api";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
+import { SpaceStatisticsPromptListCursorType, StatisticsListCursorQueryParamsType, spaceListCursorQueryDefault } from "./space-statistics-controller.types";
 
 export const getPromptStatisticsList =
   (args: LoaderFunctionArgs) =>

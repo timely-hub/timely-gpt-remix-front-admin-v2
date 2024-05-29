@@ -7,11 +7,10 @@ import DropDown, { parserForObject } from "../Box/DropDown";
 import LabelBox from "../Box/LabelBox";
 import TextInput from "../Box/TextInput";
 import { spaceCreateStyle } from "./styles.css";
+import { useNavigate } from "@remix-run/react";
 
 export default function SpaceCreate() {
-  const parsedList = parserForObject(spaceGradeLabel).map((item) =>
-    item.key === "master" ? { ...item, disabled: true } : item
-  );
+  const navigate = useNavigate();
   return (
     <Box margin={"0 auto"} padding={"32px 0"} width={"332px"}>
       <div className={spaceCreateStyle.title}>필수 정보 입력</div>
@@ -87,7 +86,13 @@ export default function SpaceCreate() {
             ></TextInput>
           </Box>
         </Box>
-        <Buttons>다음 단계</Buttons>
+        <Buttons
+          onClick={() => {
+            navigate("/space/create/prompt-package");
+          }}
+        >
+          다음 단계
+        </Buttons>
       </Box>
     </Box>
   );

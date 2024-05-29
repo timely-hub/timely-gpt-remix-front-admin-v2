@@ -1,6 +1,5 @@
 import {
   useLoaderData,
-  useLocation,
   useNavigate,
   useRevalidator,
 } from "@remix-run/react";
@@ -11,17 +10,13 @@ import Buttons from "~/components/Box/Buttons";
 import Loading from "~/components/Box/Loading";
 import { TD, TH, Table } from "~/components/Box/Table";
 import { loader } from "~/routes/statistics.space.$id";
-import { SpaceInfoType } from "~/services/space-controller/get-space-info.$id.server";
-import {
-  SpaceStatisticsMemberListCursorType,
-  SpaceStatisticsPromptListCursorType,
-  SpaceStatisticsTokenUsageType,
-} from "~/services/space-statistics-controller/space-statistics-controller.types";
 import { vars } from "~/styles/vars.css";
 import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 import { recentStatisticsStyle } from "./styles.css";
+import { SpaceStatisticsMemberListCursorType, SpaceStatisticsPromptListCursorType, SpaceStatisticsTokenUsageType } from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-info.$id.server";
 
 const recentUserColumn = [
   { name: "이름", filterName: null },
@@ -44,7 +39,6 @@ const recentPromptColumn = [
 export default function SpaceStatistics() {
   const revalidator = useRevalidator();
   const navigate = useNavigate();
-  const location = useLocation();
   const {
     statsRecentMember,
     statsRecentPrompt,
