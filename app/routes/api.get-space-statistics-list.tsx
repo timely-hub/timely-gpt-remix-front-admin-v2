@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
-import { getSpaceStatisticsList } from "~/Services/space-statistics-controller/get-space-ststistics-list.server";
+import { getSpaceStatisticsList } from "~/Services/space-statistics-controller/get-space-statistics-list.server";
 import { spaceListCursorQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import { getQueryParams } from "~/utils/helpers";
 
