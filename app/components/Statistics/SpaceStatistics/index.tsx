@@ -1,9 +1,11 @@
-import {
-  useLoaderData,
-  useNavigate,
-  useRevalidator,
-} from "@remix-run/react";
+import { useLoaderData, useNavigate, useRevalidator } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-info-by-id.server";
+import {
+  SpaceStatisticsMemberListCursorType,
+  SpaceStatisticsPromptListCursorType,
+  SpaceStatisticsTokenUsageType,
+} from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import Sorting from "~/assets/icons/Sorting.svg?react";
 import Box, { Div, Flex } from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
@@ -15,8 +17,6 @@ import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 import { recentStatisticsStyle } from "./styles.css";
-import { SpaceStatisticsMemberListCursorType, SpaceStatisticsPromptListCursorType, SpaceStatisticsTokenUsageType } from "~/Services/space-statistics-controller/space-statistics-controller.types";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-info.$id.server";
 
 const recentUserColumn = [
   { name: "이름", filterName: null },

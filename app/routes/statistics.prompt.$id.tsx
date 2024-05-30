@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { getSpaceInfo } from "~/Services/space-controller/get-space-info.$id.server";
+import { getSpaceInfo } from "~/Services/space-controller/get-space-info-by-id.server";
 import PromptStatistics from "~/components/Statistics/PromptStatistics";
 
 export const loader = async (args: LoaderFunctionArgs) => {

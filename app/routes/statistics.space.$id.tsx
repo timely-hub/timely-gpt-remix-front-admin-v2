@@ -1,7 +1,14 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { getSpaceInfo } from "~/Services/space-controller/get-space-info.$id.server";
-import { getSpaceStatsNewMemberById, getSpaceStatsNewPromptById, getSpaceStatsTokenUsage } from "~/Services/space-statistics-controller/get-space-statistics-by-id.server";
-import { spaceStatisticsListQueryDefault, spaceStatisticsTokenUsageQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { getSpaceInfo } from "~/Services/space-controller/get-space-info-by-id.server";
+import {
+  getSpaceStatsNewMemberById,
+  getSpaceStatsNewPromptById,
+  getSpaceStatsTokenUsage,
+} from "~/Services/space-statistics-controller/get-space-statistics-by-id.server";
+import {
+  spaceStatisticsListQueryDefault,
+  spaceStatisticsTokenUsageQueryDefault,
+} from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import SpaceStatistics from "~/components/Statistics/SpaceStatistics";
 import { getQueryParams } from "~/utils/helpers";
 

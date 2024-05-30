@@ -1,3 +1,4 @@
+import { useNavigate } from "@remix-run/react";
 import { vars } from "~/styles/vars.css";
 import { spaceGradeLabel } from "~/types/enum.types";
 import Box from "../Box";
@@ -7,7 +8,6 @@ import DropDown, { parserForObject } from "../Box/DropDown";
 import LabelBox from "../Box/LabelBox";
 import TextInput from "../Box/TextInput";
 import { spaceCreateStyle } from "./styles.css";
-import { useNavigate } from "@remix-run/react";
 
 export default function SpaceCreate() {
   const navigate = useNavigate();

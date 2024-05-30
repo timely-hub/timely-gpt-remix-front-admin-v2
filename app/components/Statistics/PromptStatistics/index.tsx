@@ -2,6 +2,12 @@ import { Form, useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-info-by-id.server";
+import {
+  SpaceStatisticsPromptListCursorType,
+  StatisticsListCursorQueryParamsType,
+  spaceListCursorQueryDefault,
+} from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import Search from "~/assets/icons/Search.svg?react";
 import Sorting from "~/assets/icons/Sorting.svg?react";
 import Box, { Div, Flex } from "~/components/Box";
@@ -14,8 +20,6 @@ import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
-import { SpaceStatisticsPromptListCursorType, StatisticsListCursorQueryParamsType, spaceListCursorQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-info.$id.server";
 
 const columns = [
   { name: "프롬프트ID", filterName: null },

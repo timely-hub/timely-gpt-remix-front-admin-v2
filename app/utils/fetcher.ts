@@ -1,4 +1,3 @@
-import { de } from "@faker-js/faker";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { getUserToken } from "~/.server/session";
 import { ApiResponseType } from "~/types/api";
@@ -147,7 +146,6 @@ const fetcherFunction =
         ...defaultOptions.headers,
         Authorization: `Bearer ${accessToken}`,
       };
-      console.log(defaultOptions.headers);
     }
     if (restOptions) {
       defaultOptions = {

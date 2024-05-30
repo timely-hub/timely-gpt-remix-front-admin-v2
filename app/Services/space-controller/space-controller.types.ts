@@ -4,4 +4,20 @@ export type PromptPackageListType = {
   promptIdList: number[];
   createdAt: string;
   updatedAt: string;
+  promptList?: PromptInfoType[];
+};
+
+export type PromptInfoType = {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  categoryId: number;
+  llmModelType: string;
+  llmModelCategoryType: string;
+  viewCount: number;
+  bookmarkCount: number;
+  executeCount: number;
+  createdAt: string;
+  updatedAt: string;
 };
