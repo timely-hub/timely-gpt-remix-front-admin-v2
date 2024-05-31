@@ -29,7 +29,12 @@ export interface CalendarInputProps<T extends string | Date | null = string>
   placeholder?: string;
   disabled?: boolean;
   readOnly?: boolean;
-  onChange?: (value: { formatted: string; date: Date; dayJs: Dayjs }) => void;
+  onChange?: (value: {
+    formatted: string;
+    date: Date;
+    dayJs: Dayjs;
+    isoDate: string;
+  }) => void;
 }
 
 const calendarFormat = "YYYY년 MM월 DD일";
@@ -70,6 +75,7 @@ const CalendarInput = <T extends string | Date | null = string>(
       formatted: date.format(calendarFormat),
       date: date.toDate(),
       dayJs: date,
+      isoDate: date.toISOString(),
     });
   };
   const toggleCalendar = () => {

@@ -1,5 +1,12 @@
-import { ComplexStyleRule, style, StyleRule } from "@vanilla-extract/css";
+import {
+  ComplexStyleRule,
+  globalStyle,
+  GlobalStyleRule,
+  style,
+  StyleRule,
+} from "@vanilla-extract/css";
 import { objectKeys } from "~/utils/typeHelpers";
+import * as layers from "./layers.css";
 
 type ClassNames = string | Array<ClassNames>;
 
@@ -55,3 +62,10 @@ export const appStyles = <T extends { [key in string]: ComplexStyleRule }>(
 
 export const sprinkleStyle = (...rules: (StyleRule | ClassNames)[]) =>
   layerStyle(rules, "sprinkles");
+
+export const globalAppStyle = (selector: string, rule: GlobalStyleRule) =>
+  globalStyle(selector, {
+    "@layer": {
+      [layers.app]: rule,
+    },
+  });

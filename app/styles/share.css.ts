@@ -8,6 +8,7 @@ export const promptBoxStyle = appStyles({
     borderRadius: "16px",
     padding: "24px 20px",
     backgroundColor: vars.colors["Grayscale/White"],
+    width: "24%",
   },
   title: {
     ...getTextStyles("Grayscale/Black", "Body/16px/16px.700"),

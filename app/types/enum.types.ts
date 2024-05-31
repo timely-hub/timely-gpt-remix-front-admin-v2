@@ -18,10 +18,10 @@ export const isSpaceRoleValueType = (
 };
 
 export const spaceGradeLabel = {
-  basic: "영업용(체험판)",
-  premium: "베이직",
-  master: "프로",
-};
+  BASIC: "영업용(체험판)",
+  PREMIUM: "베이직",
+  MASTER: "프로",
+} as const;
 
 export type SpaceGradeType = keyof typeof spaceGradeLabel;
 export type SpaceGradeValueType = (typeof spaceGradeLabel)[SpaceGradeType];
