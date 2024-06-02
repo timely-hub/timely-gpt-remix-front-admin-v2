@@ -67,8 +67,8 @@ const adminPageMenus = [
       },
       {
         id: 2,
-        title: "프롬프트 꾸러미 생성",
-        href: "/store/prompt-package/create",
+        title: "프롬프트 꾸러미 관리",
+        href: "/store/prompt-package",
       },
     ],
   },

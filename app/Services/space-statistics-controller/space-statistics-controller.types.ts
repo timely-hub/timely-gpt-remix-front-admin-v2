@@ -103,3 +103,39 @@ export const spaceStatisticsTokenUsageQueryDefault = {
 export type SpaceStatisticsTokenUsageQueryParamsType = Partial<
   typeof spaceStatisticsTokenUsageQueryDefault
 >;
+
+export const storePromptListQueryDefault = {
+  cursor: "",
+  take: "10",
+  order: "asc",
+  basis: "",
+  name: "",
+  categoryId: "",
+};
+
+export type StorePromptListQueryParamsType = Partial<
+  typeof storePromptListQueryDefault
+>;
+
+export type StorePromptListType = {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  member: MemberType;
+  categoryId: number;
+  llmModelType: string;
+  llmModelCategoryType: string;
+  viewCount: number;
+  bookmarkCount: number;
+  executeCount: number;
+  executeCountSnapshot: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export interface MemberType {
+  id: string;
+  name: string;
+  profileImageUrl: string;
+}

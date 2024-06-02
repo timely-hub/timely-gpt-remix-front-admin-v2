@@ -18,7 +18,11 @@ import Loading from "../Box/Loading";
 import { TD, TH } from "../Box/Table";
 import TextInput from "../Box/TextInput";
 import { statisticsSpaceStyle } from "./styles.css";
-import { SpaceListCursorType, StatisticsListCursorQueryParamsType, spaceListCursorQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import {
+  SpaceListCursorType,
+  StatisticsListCursorQueryParamsType,
+  spaceListCursorQueryDefault,
+} from "~/Services/space-statistics-controller/space-statistics-controller.types";
 
 const columns = [
   { name: "스페이스명", filterName: null },
@@ -210,16 +214,20 @@ export default function Statistics() {
                 <TD>
                   <Buttons
                     onClick={() => {
-                      if (pathname === "/statistics/space") {
-                        navigate(`/statistics/space/${item?.id}`);
-                      } else if (pathname === "/statistics/user") {
-                        navigate(`/statistics/user/${item?.id}`);
+                      if (pathname === "/space/list") {
+                        navigate(`/space/list/info/${item?.id}`);
                       } else {
-                        navigate(`/statistics/prompt/${item?.id}`);
+                        if (pathname === "/statistics/space") {
+                          navigate(`/statistics/space/${item?.id}`);
+                        } else if (pathname === "/statistics/user") {
+                          navigate(`/statistics/user/${item?.id}`);
+                        } else {
+                          navigate(`/statistics/prompt/${item?.id}`);
+                        }
                       }
                     }}
                   >
-                    통계보기
+                    {pathname === "/space/list" ? "자세히보기" : "통계보기"}
                   </Buttons>
                 </TD>
               </>

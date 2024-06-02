@@ -1,12 +1,12 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { getSpaceInfo } from "~/Services/space-controller/get-space-info-by-id.server";
+import { getSpaceDomain } from "~/Services/space-controller/get-space-domain-by-id.server";
 import UserStatistics from "~/components/Statistics/UserStatistics";
 
 export const loader = async (args: LoaderFunctionArgs) => {
   const { id } = args.params;
-  const spaceInfo = await getSpaceInfo(args)(id || "");
+  const spaceDomain = await getSpaceDomain(args)(id || "");
   return {
-    spaceInfo: spaceInfo?.data,
+    spaceDomain: spaceDomain?.data,
     spaceId: id,
   };
 };

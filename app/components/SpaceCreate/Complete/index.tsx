@@ -5,7 +5,6 @@ import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
 import useBulkState from "~/hooks/useBulkState";
 import { useEffect } from "react";
 import { ApiResponseType } from "~/types/api";
-import toastSlice, { callToast } from "~/zustand/toastSlice";
 
 const getSpaceMain = async () => {
   const response = await localForage.getItem("spaceMain");

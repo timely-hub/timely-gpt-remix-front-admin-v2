@@ -1,25 +1,23 @@
-import { Form, useLoaderData, useNavigate, useParams } from "@remix-run/react";
+import { Form, useNavigate } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
-import { TableVirtuoso } from "react-virtuoso";
 import {
-  SpaceStatisticsPromptListCursorType,
-  StatisticsListCursorQueryParamsType,
-  spaceListCursorQueryDefault,
+  StorePromptListQueryParamsType,
+  StorePromptListType,
+  storePromptListQueryDefault,
 } from "~/Services/space-statistics-controller/space-statistics-controller.types";
-import Search from "~/assets/icons/Search.svg?react";
-import Sorting from "~/assets/icons/Sorting.svg?react";
-import Box, { Div, Flex } from "~/components/Box";
+import Box from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
 import Loading from "~/components/Box/Loading";
-import { TD, TH } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
-import { loader } from "~/routes/statistics.prompt.$id";
-import { vars } from "~/styles/vars.css";
+import { statisticsSpaceStyle } from "~/components/Statistics/styles.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import { statisticsSpaceStyle } from "../styles.css";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
+import Search from "~/assets/icons/Search.svg?react";
+import { TableVirtuoso } from "react-virtuoso";
+import { vars } from "~/styles/vars.css";
+import { TD, TH } from "~/components/Box/Table";
+import Sorting from "~/assets/icons/Sorting.svg?react";
 
 const columns = [
   { name: "프롬프트ID", filterName: null },
@@ -29,6 +27,8 @@ const columns = [
   { name: "카테고리", filterName: null },
   { name: "조회수", filterName: "viewCount" },
   { name: "요청수", filterName: "executeCount" },
+  { name: "생성일", filterName: null },
+  { name: "관리", filterName: null },
 ];
 
 type QueryParamsType = {
@@ -37,27 +37,24 @@ type QueryParamsType = {
   basis: string;
 };
 
-const getPromptList = async (
-  id: string,
-  queryParams: StatisticsListCursorQueryParamsType
+const getStorePromptList = async (
+  queryParams: StorePromptListQueryParamsType
 ) => {
   queryParams = omitUnusedSearchParams(
-    spaceListCursorQueryDefault,
+    storePromptListQueryDefault,
     queryParams
   );
   const parsed = objectToQueryParams({ ...queryParams });
-  const res = await fetch(`/api/get-prompt-statistics-list/${id}?${parsed}`, {
+  const res = await fetch(`/api/get-store-prompt-list?${parsed}`, {
     cache: "no-cache",
   });
   return (await res.json()) as ApiResponseType<
-    CursorResponse<SpaceStatisticsPromptListCursorType>
+    CursorResponse<StorePromptListType>
   >;
 };
 
-export default function PromptStatistics() {
-  const { spaceDomain, spaceId } = useLoaderData<typeof loader>();
+export default function PromptManagementComponent() {
   const navigate = useNavigate();
-  const { id } = useParams<"id">();
   const virtuoso = useRef(null);
   const [queryParams, setQueryParams] = useState<QueryParamsType>({
     keyword: "",
@@ -69,14 +66,14 @@ export default function PromptStatistics() {
     order: "desc",
     basis: "",
   });
-  const [spaceDomainData, setSpaceDomainData] = useState<SpaceInfoType>();
+
   const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } =
     useInfiniteQuery({
-      queryKey: ["prompt/list", id, parsedQueryParams],
+      queryKey: ["store/prompt", parsedQueryParams],
       queryFn: async ({ pageParam }) => {
-        const res = await getPromptList(id!, {
+        const res = await getStorePromptList({
           cursor: pageParam?.toString() || "",
           ...parsedQueryParams,
         });
@@ -121,12 +118,6 @@ export default function PromptStatistics() {
       order: prev.order === "desc" ? "asc" : "desc",
     }));
   };
-
-  useMemo(() => {
-    if (!spaceDomain) return;
-    setSpaceDomainData(spaceDomain);
-  }, [spaceDomain]);
-
   return (
     <>
       {loading && <Loading />}
@@ -136,9 +127,7 @@ export default function PromptStatistics() {
         justifyContent={"space-between"}
         marginBottom={"16px"}
       >
-        <p className={statisticsSpaceStyle.title}>
-          {spaceDomainData?.name} 생성된 프롬프트 통계
-        </p>
+        <p className={statisticsSpaceStyle.title}>스토어 프롬프트 목록</p>
         <Buttons
           onClick={() => {
             refetch();
@@ -165,29 +154,6 @@ export default function PromptStatistics() {
           }
         />
       </Form>
-      <Flex marginBottom={"16px"}>
-        <p className={statisticsSpaceStyle.subTitle}>전체 프롬프트 통계</p>
-        <Div marginLeft={"auto"} display={"inherit"} gap={"4px"}>
-          <Buttons
-            backgroundColor={vars.colors["Primary/Primary 50"]}
-            color={vars.colors["Primary/Primary 500"]}
-            onClick={() => {
-              navigate(`/statistics/user/${spaceId}`);
-            }}
-          >
-            유저 통계 보기
-          </Buttons>
-          <Buttons
-            backgroundColor={vars.colors["Primary/Primary 50"]}
-            color={vars.colors["Primary/Primary 500"]}
-            onClick={() => {
-              navigate(`/statistics/space/${spaceId}`);
-            }}
-          >
-            스페이스 통계 보기
-          </Buttons>
-        </Div>
-      </Flex>
       <div className={loading ? statisticsSpaceStyle.loading : ""}>
         <TableVirtuoso
           style={{

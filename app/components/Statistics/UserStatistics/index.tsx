@@ -2,7 +2,6 @@ import { Form, useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-info-by-id.server";
 import {
   SpaceStatisticsMemberListCursorType,
   StatisticsListCursorQueryParamsType,
@@ -20,6 +19,7 @@ import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
 
 const columns = [
   { name: "유저ID", filterName: null },
@@ -55,7 +55,7 @@ const getUserList = async (
 
 export default function UserStatistics() {
   const { id } = useParams<"id">();
-  const { spaceId, spaceInfo } = useLoaderData<typeof loader>();
+  const { spaceId, spaceDomain } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const virtuoso = useRef(null);
   const [queryParams, setQueryParams] = useState<QueryParamsType>({
@@ -68,7 +68,7 @@ export default function UserStatistics() {
     order: "desc",
     basis: "",
   });
-  const [spaceInfoData, setSpaceInfoData] = useState<SpaceInfoType>();
+  const [spaceDomainData, setSpaceDomainData] = useState<SpaceInfoType>();
   const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } =
@@ -122,9 +122,9 @@ export default function UserStatistics() {
   };
 
   useMemo(() => {
-    if (!spaceInfo) return;
-    setSpaceInfoData(spaceInfo);
-  }, [spaceInfo]);
+    if (!spaceDomain) return;
+    setSpaceDomainData(spaceDomain);
+  }, [spaceDomain]);
   return (
     <>
       {loading && <Loading />}
@@ -135,7 +135,7 @@ export default function UserStatistics() {
         marginBottom={"16px"}
       >
         <p className={statisticsSpaceStyle.title}>
-          {spaceInfoData?.name} 유저 통계
+          {spaceDomainData?.name} 유저 통계
         </p>
         <Buttons
           onClick={() => {

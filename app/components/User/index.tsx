@@ -1,34 +1,33 @@
-import { Form, useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
-import { TableVirtuoso } from "react-virtuoso";
 import {
   SpaceStatisticsPromptListCursorType,
   StatisticsListCursorQueryParamsType,
   spaceListCursorQueryDefault,
 } from "~/Services/space-statistics-controller/space-statistics-controller.types";
-import Search from "~/assets/icons/Search.svg?react";
-import Sorting from "~/assets/icons/Sorting.svg?react";
-import Box, { Div, Flex } from "~/components/Box";
-import Buttons from "~/components/Box/Buttons";
-import Loading from "~/components/Box/Loading";
-import { TD, TH } from "~/components/Box/Table";
-import TextInput from "~/components/Box/TextInput";
-import { loader } from "~/routes/statistics.prompt.$id";
-import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import { statisticsSpaceStyle } from "../styles.css";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
+import Loading from "../Box/Loading";
+import Box, { Div, Flex } from "../Box";
+import { statisticsSpaceStyle } from "../Statistics/styles.css";
+import Buttons from "../Box/Buttons";
+import { Form, useNavigate } from "@remix-run/react";
+import TextInput from "../Box/TextInput";
+import Search from "~/assets/icons/Search.svg?react";
+import Sorting from "~/assets/icons/Sorting.svg?react";
+import { vars } from "~/styles/vars.css";
+import { TableVirtuoso } from "react-virtuoso";
+import { TD, TH } from "../Box/Table";
 
 const columns = [
-  { name: "프롬프트ID", filterName: null },
-  { name: "유저ID", filterName: null },
+  { name: "유저 ID", filterName: null },
   { name: "이름", filterName: null },
-  { name: "설명", filterName: null },
-  { name: "카테고리", filterName: null },
-  { name: "조회수", filterName: "viewCount" },
-  { name: "요청수", filterName: "executeCount" },
+  { name: "이메일", filterName: null },
+  { name: "스페이스", filterName: null },
+  { name: "유저타입", filterName: null },
+  { name: "프롬프트 요청수", filterName: null },
+  { name: "최근 접속", filterName: null },
+  { name: "관리", filterName: null },
 ];
 
 type QueryParamsType = {
@@ -37,8 +36,7 @@ type QueryParamsType = {
   basis: string;
 };
 
-const getPromptList = async (
-  id: string,
+const getUserList = async (
   queryParams: StatisticsListCursorQueryParamsType
 ) => {
   queryParams = omitUnusedSearchParams(
@@ -46,7 +44,7 @@ const getPromptList = async (
     queryParams
   );
   const parsed = objectToQueryParams({ ...queryParams });
-  const res = await fetch(`/api/get-prompt-statistics-list/${id}?${parsed}`, {
+  const res = await fetch(`/api/get-user-list?${parsed}`, {
     cache: "no-cache",
   });
   return (await res.json()) as ApiResponseType<
@@ -54,11 +52,11 @@ const getPromptList = async (
   >;
 };
 
-export default function PromptStatistics() {
-  const { spaceDomain, spaceId } = useLoaderData<typeof loader>();
+export default function UserListComponent() {
   const navigate = useNavigate();
-  const { id } = useParams<"id">();
   const virtuoso = useRef(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const [queryParams, setQueryParams] = useState<QueryParamsType>({
     keyword: "",
     order: "desc",
@@ -69,14 +67,12 @@ export default function PromptStatistics() {
     order: "desc",
     basis: "",
   });
-  const [spaceDomainData, setSpaceDomainData] = useState<SpaceInfoType>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const formRef = useRef<HTMLFormElement>(null);
+
   const { data, isFetchingNextPage, fetchNextPage, hasNextPage, refetch } =
     useInfiniteQuery({
-      queryKey: ["prompt/list", id, parsedQueryParams],
+      queryKey: ["user/list", parsedQueryParams],
       queryFn: async ({ pageParam }) => {
-        const res = await getPromptList(id!, {
+        const res = await getUserList({
           cursor: pageParam?.toString() || "",
           ...parsedQueryParams,
         });
@@ -91,7 +87,6 @@ export default function PromptStatistics() {
         return lastPage?.data?.paging.cursor || null;
       },
     });
-
   const itemList = useMemo(() => {
     return data?.pages.map((page) => page?.data?.list ?? []).flat();
   }, [data]);
@@ -121,12 +116,6 @@ export default function PromptStatistics() {
       order: prev.order === "desc" ? "asc" : "desc",
     }));
   };
-
-  useMemo(() => {
-    if (!spaceDomain) return;
-    setSpaceDomainData(spaceDomain);
-  }, [spaceDomain]);
-
   return (
     <>
       {loading && <Loading />}
@@ -136,9 +125,7 @@ export default function PromptStatistics() {
         justifyContent={"space-between"}
         marginBottom={"16px"}
       >
-        <p className={statisticsSpaceStyle.title}>
-          {spaceDomainData?.name} 생성된 프롬프트 통계
-        </p>
+        <p className={statisticsSpaceStyle.title}>전체 유저 목록</p>
         <Buttons
           onClick={() => {
             refetch();
@@ -171,18 +158,14 @@ export default function PromptStatistics() {
           <Buttons
             backgroundColor={vars.colors["Primary/Primary 50"]}
             color={vars.colors["Primary/Primary 500"]}
-            onClick={() => {
-              navigate(`/statistics/user/${spaceId}`);
-            }}
+            onClick={() => {}}
           >
             유저 통계 보기
           </Buttons>
           <Buttons
             backgroundColor={vars.colors["Primary/Primary 50"]}
             color={vars.colors["Primary/Primary 500"]}
-            onClick={() => {
-              navigate(`/statistics/space/${spaceId}`);
-            }}
+            onClick={() => {}}
           >
             스페이스 통계 보기
           </Buttons>

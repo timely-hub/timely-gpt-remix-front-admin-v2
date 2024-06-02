@@ -1,9 +1,14 @@
-import { DetailedHTMLProps } from "react";
+import { DetailedHTMLProps, HTMLAttributes } from "react";
 import { FontStyleProps } from "~/components/Box/types";
 import { SprinklesOmit } from "~/styles/rainbow-sprinkles.css";
 import { SpaceGradeType } from "./enum.types";
 
 type ISODateString = string;
+
+export type DivProps = FontStyleProps &
+  SprinklesOmit<
+    DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+  >;
 
 export type UserInfoType = {
   id: string; // UUID
@@ -51,6 +56,9 @@ export interface SpaceMainType {
   recommendPromptIdList: number[];
   spacePayment: SpacePaymentType;
   spaceDashboardList: SpaceDashboardListType[];
+  tokenUsage?: number;
+  credit?: number;
+  usedCredit?: number;
 }
 
 export const defaultSpaceMainType: SpaceMainType = {

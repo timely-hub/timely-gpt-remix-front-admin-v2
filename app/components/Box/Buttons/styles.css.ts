@@ -60,11 +60,73 @@ const buttonColors = {
       color: vars.colors["Grayscale/White"],
     },
   },
+  primaryGhostFilled: {
+    backgroundColor: vars.colors["Primary/Primary 50"],
+    border: "none",
+    borderRadius: "8px",
+    outline: "none",
+    color: vars.colors["Primary/Primary 500"],
+    ":hover": {
+      backgroundColor: vars.colors["Primary/Primary 100"],
+    },
+    ":active": {
+      backgroundColor: vars.colors["Primary/Primary 50"],
+    },
+    ":disabled": {
+      backgroundColor: vars.colors["Grayscale/Gray 50"],
+      color: vars.colors["Primary/Primary 200"],
+    },
+  },
+  grayscaleFilled: {
+    backgroundColor: vars.colors["Grayscale/Gray 50"],
+    border: "none",
+    borderRadius: "8px",
+    outline: "none",
+    color: vars.colors["Grayscale/Black"],
+    ":hover": {
+      backgroundColor: vars.colors["Grayscale/Gray 100"],
+    },
+    ":active": {
+      backgroundColor: vars.colors["Grayscale/Gray 200"],
+      color: vars.colors["Grayscale/White"],
+    },
+    ":disabled": {
+      backgroundColor: vars.colors["Grayscale/Gray 200"],
+      color: vars.colors["Grayscale/White"],
+    },
+  },
+  dangerGhostFilled: {
+    backgroundColor: vars.colors["Red/Red 50"],
+    border: "none",
+    borderRadius: "8px",
+    outline: "none",
+    color: vars.colors["Red/Red 500"],
+    ":hover": {
+      backgroundColor: vars.colors["Red/Red 100"],
+    },
+    ":active": {
+      backgroundColor: vars.colors["Red/Red 50"],
+      color: vars.colors["Red/Red 200"],
+    },
+    ":disabled": {
+      backgroundColor: vars.colors["Red/Red 50"],
+      color: vars.colors["Red/Red 200"],
+    },
+  },
 } as const;
 
 const buttonsStyles = {
   primaryFilled: layerStyle({
     ...buttonColors.primaryFilled,
+  }),
+  primaryGhostFilled: layerStyle({
+    ...buttonColors.primaryGhostFilled,
+  }),
+  grayscaleFilled: layerStyle({
+    ...buttonColors.grayscaleFilled,
+  }),
+  dangerGhostFilled: layerStyle({
+    ...buttonColors.dangerGhostFilled,
   }),
 };
 

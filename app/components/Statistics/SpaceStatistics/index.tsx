@@ -1,6 +1,5 @@
 import { useLoaderData, useNavigate, useRevalidator } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-info-by-id.server";
 import {
   SpaceStatisticsMemberListCursorType,
   SpaceStatisticsPromptListCursorType,
@@ -17,6 +16,7 @@ import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 import { recentStatisticsStyle } from "./styles.css";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
 
 const recentUserColumn = [
   { name: "이름", filterName: null },
@@ -44,7 +44,7 @@ export default function SpaceStatistics() {
     statsRecentPrompt,
     tokenUsage,
     spaceId,
-    spaceInfo,
+    spaceDomain,
   } = useLoaderData<typeof loader>();
   const [loading, setLoading] = useState<boolean>(false);
   const [statsRecentMemberData, setStatsRecentMemberData] =
@@ -53,7 +53,7 @@ export default function SpaceStatistics() {
     useState<SpaceStatisticsPromptListCursorType[]>();
   const [tokenUsageData, setTokenUsageData] =
     useState<SpaceStatisticsTokenUsageType>();
-  const [spaceInfoData, setSpaceInfoData] = useState<SpaceInfoType>();
+  const [spaceDomainData, setSpaceDomainData] = useState<SpaceInfoType>();
 
   useEffect(() => {
     if (!statsRecentMember || !statsRecentPrompt || !tokenUsage) return;
@@ -69,9 +69,9 @@ export default function SpaceStatistics() {
   }, [statsRecentMember, statsRecentPrompt, tokenUsage]);
 
   useMemo(() => {
-    if (!spaceInfo) return;
-    setSpaceInfoData(spaceInfo);
-  }, [spaceInfo]);
+    if (!spaceDomain) return;
+    setSpaceDomainData(spaceDomain);
+  }, [spaceDomain]);
   return (
     <>
       {loading && <Loading />}
@@ -81,7 +81,7 @@ export default function SpaceStatistics() {
         marginBottom={"16px"}
       >
         <p className={statisticsSpaceStyle.title}>
-          {spaceInfoData?.name} 스페이스 통계
+          {spaceDomainData?.name} 스페이스 통계
         </p>
         <Buttons
           onClick={() => {
