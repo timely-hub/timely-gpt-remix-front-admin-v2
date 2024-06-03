@@ -4,13 +4,13 @@ import { vars } from "~/styles/vars.css";
 const calendarInputStyle = {
   wrap: style({
     position: "relative",
-    border: `1px solid ${vars.colors["Grayscale/Gray 300"]}`,
+    border: `1px solid ${vars.colors["Grayscale/Gray 100"]}`,
     borderRadius: "8px",
     width: "inherit",
     backgroundColor: vars.colors["Grayscale/White"],
     userSelect: "none",
     color: vars.colors["Grayscale/Black"],
-    ...vars.typography["Title/18px/18px.700"],
+    ...vars.typography["Body/14px/14px.400"],
   }),
   focus: style({
     borderColor: vars.colors["Primary/Primary 500"],

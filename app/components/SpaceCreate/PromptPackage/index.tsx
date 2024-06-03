@@ -1,4 +1,5 @@
 import { useLoaderData, useNavigate } from "@remix-run/react";
+import clsx from "clsx";
 import localForage from "localforage";
 import { useEffect, useState } from "react";
 import {
@@ -9,8 +10,11 @@ import ArrowDown from "~/assets/icons/ArrowDown.svg?react";
 import Box, { Div, Flex } from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
 import { loader } from "~/routes/space.create.prompt-package";
+import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
+import { llmModelCategoryTypeLabel } from "~/types/enum.types";
 import { spaceCreateStyle } from "../styles.css";
+import { promptPackageStyle } from "./styles.css";
 
 export default function PromptPackage() {
   const { packageList } = useLoaderData<typeof loader>();
@@ -19,10 +23,10 @@ export default function PromptPackage() {
     useState<PromptPackageListType[]>();
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [toggleItems, setToggleItems] = useState<Record<number, boolean>>({});
-  const toggleCheckbox = (id: number) => {
+  const toggleCheckbox = (item: PromptInfoType) => {
     setCheckedItems((prev) => ({
       ...prev,
-      [id]: !prev[id],
+      [item.id]: !prev[item.id],
     }));
   };
 
@@ -71,12 +75,15 @@ export default function PromptPackage() {
             padding={"16px"}
           >
             <Box display={"flex"} gap={"8px"}>
-              <label id={`promptPackage-${item.id}`}>
+              <label
+                className={promptPackageStyle.label}
+                id={`promptPackage-${item.id}`}
+              >
                 <input
                   type="checkbox"
                   name={`promptPackage-${item.id}`}
                   checked={checkedItems[item.id] || false}
-                  onChange={() => toggleCheckbox(item.id)}
+                  onChange={() => toggleCheckbox(item)}
                 />
                 <p>{item.label}</p>
                 <p>({item.promptIdList.length}개)</p>
@@ -89,26 +96,37 @@ export default function PromptPackage() {
                 <ArrowDown></ArrowDown>
               </Div>
             </Box>
-            <Flex>
+            <Flex gap={"8px"}>
               {toggleItems[item.id] &&
                 item.promptList?.map((prompt, index) => {
                   return (
-                    <Flex gap={"16px"} padding={"16px"} key={index}>
+                    <Box className={clsx(promptBoxStyle.box)} key={index}>
                       <label id={`prompt-${prompt.id}`}>
-                        <Box
-                          border={`1px solid ${vars.colors["Grayscale/Gray 100"]}`}
-                          flex={1}
-                          padding={"16px"}
-                        >
+                        <Flex gap={"8px"}>
                           <input
                             name={`prompt-${prompt.id}`}
                             type="checkbox"
                             onChange={(event) => handleCheck(event, prompt)}
                           />
-                          <p>{prompt.name}</p>
-                        </Box>
+                          <div className={promptBoxStyle.llmModel}>
+                            {prompt?.llmModelCategoryType
+                              ? llmModelCategoryTypeLabel[
+                                  prompt.llmModelCategoryType as keyof typeof llmModelCategoryTypeLabel
+                                ]
+                              : ""}
+                          </div>
+                          <div className={promptBoxStyle.category}>
+                            {prompt.categoryId}
+                          </div>
+                        </Flex>
+                        <div className={promptBoxStyle.title}>
+                          {prompt.name}
+                        </div>
+                        <div className={promptBoxStyle.description}>
+                          {prompt.description}
+                        </div>
                       </label>
-                    </Flex>
+                    </Box>
                   );
                 })}
             </Flex>

@@ -93,7 +93,6 @@ const adminRightSideMenus = [
   {
     id: 3,
     title: "생성 완료",
-    href: "/space/create/complete",
   },
 ];
 
@@ -105,7 +104,6 @@ export default function AdminManagementLayout({
   children,
 }: AdminManagementLayoutProps) {
   const pathname = useLocation().pathname;
-  console.log(pathname);
   return (
     <Box className={adminManagementLayoutStyles.wrap}>
       <Box className={adminManagementLayoutStyles.header}>
@@ -149,7 +147,7 @@ export default function AdminManagementLayout({
                 {adminRightSideMenus.map((item) => {
                   return (
                     <Link
-                      to={item.href}
+                      to={item.href || "#"}
                       className={adminPageSideStyle.rightMenuLink}
                       key={item.id}
                     >

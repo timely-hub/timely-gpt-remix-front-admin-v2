@@ -1,17 +1,17 @@
+import clsx from "clsx";
 import localForage from "localforage";
 import { useEffect, useState } from "react";
 import { PromptInfoType } from "~/Services/space-controller/space-controller.types";
 import Box, { Div, Flex } from "~/components/Box";
-import { promptBoxStyle } from "~/styles/share.css";
-import { spaceCreateStyle } from "../styles.css";
-import clsx from "clsx";
-import Checkbox from "~/components/Box/Checkbox";
 import Buttons from "~/components/Box/Buttons";
-import { useNavigate } from "@remix-run/react";
+import Checkbox from "~/components/Box/Checkbox";
 import useBulkState from "~/hooks/useBulkState";
-import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
+import { promptBoxStyle } from "~/styles/share.css";
 import { ApiResponseType } from "~/types/api";
+import { llmModelCategoryTypeLabel } from "~/types/enum.types";
+import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
 import { callToast } from "~/zustand/toastSlice";
+import { spaceCreateStyle } from "../styles.css";
 
 const getPromptDataList = async () => {
   const response = await localForage.getItem("promptData");
@@ -35,7 +35,6 @@ const createSpace = async (spaceData: SpaceMainType) => {
 };
 
 export default function RecommendPrompt() {
-  const navigate = useNavigate();
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [activeIds, setActiveIds] = useState<number[]>([]);
   const [promptDataList, setPromptDataList] = useState<PromptInfoType[]>();
@@ -76,7 +75,7 @@ export default function RecommendPrompt() {
         추천 프롬프트 선택
       </Div>
       <Flex gap={"8px"} flexWrap={"wrap"} marginBottom={"32px"}>
-        {promptDataList?.map((item) => (
+        {promptDataList?.map((item: PromptInfoType) => (
           <Box
             className={clsx(
               promptBoxStyle.box,
@@ -86,14 +85,18 @@ export default function RecommendPrompt() {
             onClick={() => handleItemClick(item.id)}
           >
             <label id={`prompt-${item.id}`}>
-              <Flex>
+              <Flex gap={"8px"}>
                 <Checkbox
                   name={`prompt-${item.id}`}
                   active={checkedItems[item.id]}
                   onClick={() => toggleCheckbox(item.id)}
                 />
                 <div className={promptBoxStyle.llmModel}>
-                  {item.llmModelCategoryType}
+                  {item?.llmModelCategoryType
+                    ? llmModelCategoryTypeLabel[
+                        item.llmModelCategoryType as keyof typeof llmModelCategoryTypeLabel
+                      ]
+                    : ""}
                 </div>
                 <div className={promptBoxStyle.category}>{item.categoryId}</div>
               </Flex>

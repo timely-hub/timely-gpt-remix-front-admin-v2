@@ -1,9 +1,9 @@
 import clsx from "clsx";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { rainbowSprinkles } from "~/styles/rainbow-sprinkles.css";
+import { ButtonProps } from "~/types/shared.types";
 import CheckIcon from "./check.svg";
 import { checkboxStyles as css } from "./styles.css";
-import { ButtonProps } from "~/types/shared.types";
 
 interface CheckboxProps
   extends Omit<ButtonProps, "name" | "prefix" | "suffix" | "onClick"> {
@@ -58,7 +58,6 @@ export default function Checkbox({
         e.stopPropagation();
         const nextActive = !currentActive;
         changeInput(nextActive);
-        console.log("nextActive", nextActive);
         if (onClick) {
           onClick(nextActive);
         } else {

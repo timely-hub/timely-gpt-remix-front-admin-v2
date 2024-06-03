@@ -35,3 +35,24 @@ export const isSpaceGradeValueType = (
 ): arg is SpaceGradeValueType => {
   return Object.values(spaceGradeLabel).includes(arg as SpaceGradeValueType);
 };
+
+export const llmModelCategoryTypeLabel = {
+  PROMPT: "대화형",
+  IMAGE: "이미지 생성",
+  VISION: "이미지 분석",
+  AUDIO: "음성",
+} as const;
+
+export type LlmModelType = keyof typeof llmModelCategoryTypeLabel;
+export type LlmModelValueType =
+  (typeof llmModelCategoryTypeLabel)[LlmModelType];
+
+export const isLlmModelType = (arg: unknown): arg is LlmModelType => {
+  return (arg as LlmModelType) in llmModelCategoryTypeLabel;
+};
+
+export const isLlmModelValueType = (arg: unknown): arg is LlmModelValueType => {
+  return Object.values(llmModelCategoryTypeLabel).includes(
+    arg as LlmModelValueType
+  );
+};

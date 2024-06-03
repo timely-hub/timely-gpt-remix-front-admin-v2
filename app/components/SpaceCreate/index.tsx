@@ -1,7 +1,9 @@
-import localForage from "localforage";
 import { useNavigate } from "@remix-run/react";
+import localForage from "localforage";
+import useBulkState from "~/hooks/useBulkState";
 import { vars } from "~/styles/vars.css";
 import { spaceGradeLabel } from "~/types/enum.types";
+import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
 import Box from "../Box";
 import Buttons from "../Box/Buttons";
 import CalendarInput from "../Box/CalendarInput";
@@ -9,8 +11,6 @@ import DropDown, { parserForObject } from "../Box/DropDown";
 import LabelBox from "../Box/LabelBox";
 import TextInput from "../Box/TextInput";
 import { spaceCreateStyle } from "./styles.css";
-import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
-import useBulkState from "~/hooks/useBulkState";
 
 export default function SpaceCreate() {
   const navigate = useNavigate();
