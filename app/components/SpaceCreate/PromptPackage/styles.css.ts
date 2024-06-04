@@ -5,5 +5,6 @@ export const promptPackageStyle = appStyles({
     display: "inherit",
     gap: "8px",
     marginBottom: "24px",
+    width: "100%",
   },
 });

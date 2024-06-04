@@ -13,7 +13,7 @@ const rotate = keyframes({
 export const sizes = {
   small: layerStyle({
     padding: "8px 16px",
-    ...vars.typography["Body/16px/16px.400"],
+    ...vars.typography["Body/14px/14px.500"],
   }),
   large: layerStyle({
     padding: "9px 24px",

@@ -17,6 +17,23 @@ export const isSpaceRoleValueType = (
   return Object.values(spaceRoleLabel).includes(arg as SpaceRoleValueType);
 };
 
+export const userRoleLabel = {
+  ROLE_GUEST: "게스트",
+  ROLE_USER: "일반",
+  ROLE_ADMIN: "관리자",
+};
+
+export type UserRoleType = keyof typeof userRoleLabel;
+export type UserRoleValueType = (typeof userRoleLabel)[UserRoleType];
+
+export const isUserRoleType = (arg: unknown): arg is UserRoleType => {
+  return (arg as UserRoleType) in userRoleLabel;
+};
+
+export const isUserRoleValueType = (arg: unknown): arg is UserRoleValueType => {
+  return Object.values(userRoleLabel).includes(arg as UserRoleValueType);
+};
+
 export const spaceGradeLabel = {
   BASIC: "영업용(체험판)",
   PREMIUM: "베이직",

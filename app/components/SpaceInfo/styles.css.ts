@@ -34,4 +34,8 @@ export const spaceInfoStyles = appStyles({
     ...getTextStyles("Grayscale/Gray 500", "Title/18px/18px.400"),
     marginBottom: "8px",
   },
+
+  img: {
+    borderRadius: "100px",
+  },
 });

@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useFetcher, useLoaderData, useNavigate } from "@remix-run/react";
 import clsx from "clsx";
 import localForage from "localforage";
 import { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import {
 import ArrowDown from "~/assets/icons/ArrowDown.svg?react";
 import Box, { Div, Flex } from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
+import { loader as promptIdsData } from "~/routes/api.get-prompt-info.$id";
 import { loader } from "~/routes/space.create.prompt-package";
 import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
@@ -17,52 +18,36 @@ import { spaceCreateStyle } from "../styles.css";
 import { promptPackageStyle } from "./styles.css";
 
 export default function PromptPackage() {
-  const { packageList } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
+  const fetcher = useFetcher<typeof promptIdsData>();
+  const { packageList } = useLoaderData<typeof loader>();
   const [promptPackageList, setPromptPackageList] =
     useState<PromptPackageListType[]>();
-  const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
-  const [toggleItems, setToggleItems] = useState<Record<number, boolean>>({});
-  const toggleCheckbox = (item: PromptInfoType) => {
-    setCheckedItems((prev) => ({
-      ...prev,
-      [item.id]: !prev[item.id],
-    }));
-  };
+  const [accumulatedData, setAccumulatedData] = useState<PromptInfoType[]>([]);
 
-  const toggleDropDown = (id: number) => {
-    setToggleItems((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [promptInfo, setPromptInfo] = useState<
+    PromptInfoType[] | undefined | null
+  >();
+  const [toggleItems, setToggleItems] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    if (fetcher.state === "idle") {
+      setPromptInfo(fetcher.data?.response);
+      setAccumulatedData((currentData) => {
+        const newData = (fetcher.data?.response || []).filter(
+          (newItem) =>
+            !currentData.some((currentItem) => currentItem.id === newItem.id)
+        );
+        return [...currentData, ...newData];
+      });
+    }
+  }, [fetcher]);
+
   useEffect(() => {
     if (!packageList) return;
-    const convertedPackageList: PromptPackageListType[] = packageList.map(
-      (item) => ({
-        promptList: item.promptList || [],
-        id: item.id,
-        label: item.label,
-        promptIdList: item.promptIdList || [],
-        createdAt: item.createdAt,
-        updatedAt: item.updatedAt,
-      })
-    );
-    setPromptPackageList(convertedPackageList);
+    setPromptPackageList(packageList);
   }, [packageList]);
-
-  const [checkedPrompts, setCheckedPrompts] = useState<PromptInfoType[]>([]);
-
-  const handleCheck = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    prompt: PromptInfoType
-  ) => {
-    if (event.target.checked) {
-      setCheckedPrompts((prev) => [...prev, prompt]);
-    } else {
-      setCheckedPrompts((prev) => prev.filter((p) => p.id !== prompt.id));
-    }
-  };
 
   return (
     <Box margin={"0 auto"} padding={"32px"} width={"100%"}>
@@ -74,7 +59,7 @@ export default function PromptPackage() {
             border={`1px solid ${vars.colors["Grayscale/Gray 100"]}`}
             padding={"16px"}
           >
-            <Box display={"flex"} gap={"8px"}>
+            <Box display={"flex"} gap={"8px"} width={"100%"}>
               <label
                 className={promptPackageStyle.label}
                 id={`promptPackage-${item.id}`}
@@ -82,41 +67,44 @@ export default function PromptPackage() {
                 <input
                   type="checkbox"
                   name={`promptPackage-${item.id}`}
-                  checked={checkedItems[item.id] || false}
-                  onChange={() => toggleCheckbox(item)}
+                  checked={toggleItems[item.id] || false}
+                  onChange={() => {
+                    const isChecked = !toggleItems[item.id];
+                    setToggleItems({
+                      ...toggleItems,
+                      [item.id]: isChecked,
+                    });
+
+                    if (isChecked) {
+                      const formData = new FormData();
+                      formData.append("id", item.id.toString());
+                      fetcher.submit(formData, {
+                        action: `/api/get-prompt-info/${item.id}`,
+                      });
+                    }
+                  }}
                 />
                 <p>{item.label}</p>
                 <p>({item.promptIdList.length}개)</p>
+                <Div cursor={"pointer"} marginLeft={"auto"}>
+                  <ArrowDown></ArrowDown>
+                </Div>
               </label>
-              <Div
-                cursor={"pointer"}
-                marginLeft={"auto"}
-                onClick={() => toggleDropDown(item.id)}
-              >
-                <ArrowDown></ArrowDown>
-              </Div>
             </Box>
             <Flex gap={"8px"}>
               {toggleItems[item.id] &&
-                item.promptList?.map((prompt, index) => {
-                  return (
-                    <Box className={clsx(promptBoxStyle.box)} key={index}>
-                      <label id={`prompt-${prompt.id}`}>
+                accumulatedData
+                  ?.filter((prompt) => item.promptIdList.includes(prompt.id))
+                  .map((prompt, index) => {
+                    return (
+                      <Box className={clsx(promptBoxStyle.box)} key={index}>
                         <Flex gap={"8px"}>
-                          <input
-                            name={`prompt-${prompt.id}`}
-                            type="checkbox"
-                            onChange={(event) => handleCheck(event, prompt)}
-                          />
                           <div className={promptBoxStyle.llmModel}>
                             {prompt?.llmModelCategoryType
                               ? llmModelCategoryTypeLabel[
                                   prompt.llmModelCategoryType as keyof typeof llmModelCategoryTypeLabel
                                 ]
                               : ""}
-                          </div>
-                          <div className={promptBoxStyle.category}>
-                            {prompt.categoryId}
                           </div>
                         </Flex>
                         <div className={promptBoxStyle.title}>
@@ -125,10 +113,9 @@ export default function PromptPackage() {
                         <div className={promptBoxStyle.description}>
                           {prompt.description}
                         </div>
-                      </label>
-                    </Box>
-                  );
-                })}
+                      </Box>
+                    );
+                  })}
             </Flex>
           </Box>
         ))}
@@ -136,7 +123,7 @@ export default function PromptPackage() {
       <Div textAlign={"center"}>
         <Buttons
           onClick={() => {
-            localForage.setItem("promptData", checkedPrompts);
+            localForage.setItem("promptData", accumulatedData);
             navigate("/space/create/prompt-recommend");
           }}
         >

@@ -4,8 +4,6 @@ import { CategoryType } from "./store-controller.types";
 
 export default async function getCategoryList(args: LoaderFunctionArgs) {
   const fetcher = await loadFetcher(args);
-  const response = await fetcher<CategoryType>("/category/list", {
-    cache: "no-cache",
-  });
+  const response = await fetcher<CategoryType[]>("/category/list", {});
   return response;
 }

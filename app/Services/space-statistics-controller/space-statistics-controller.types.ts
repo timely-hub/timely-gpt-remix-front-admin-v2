@@ -1,3 +1,5 @@
+import { SpaceRoleType } from "~/types/enum.types";
+
 export interface PromptTable {
   promptName: string;
   description?: string;
@@ -48,7 +50,7 @@ export type SpaceStatisticsMemberListCursorType = {
   spaceMemberId?: number;
   memberName: string;
   memberEmail: string;
-  roleType?: string;
+  roleType?: SpaceRoleType | null;
   executeCount?: number;
   promptCount?: number;
   promptIdList?: number[];
@@ -66,6 +68,18 @@ export type SpaceStatisticsPromptListCursorType = {
   viewCount: number;
   executeCount: number;
   createdAt?: string;
+};
+
+export type UserListCursorType = {
+  id: string;
+  name: string;
+  email: string;
+  spaceName: string;
+  spaceMemberRoleType: SpaceRoleType | null;
+  promptExecutedCount: number;
+  lastAccessedAt: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export interface SpaceStatisticsTokenUsageType {

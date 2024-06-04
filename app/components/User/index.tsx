@@ -1,23 +1,29 @@
+import { Form, useNavigate } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
+import { TableVirtuoso } from "react-virtuoso";
 import {
-  SpaceStatisticsPromptListCursorType,
   StatisticsListCursorQueryParamsType,
+  UserListCursorType,
   spaceListCursorQueryDefault,
 } from "~/Services/space-statistics-controller/space-statistics-controller.types";
-import { ApiResponseType, CursorResponse } from "~/types/api";
-import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import Loading from "../Box/Loading";
-import Box, { Div, Flex } from "../Box";
-import { statisticsSpaceStyle } from "../Statistics/styles.css";
-import Buttons from "../Box/Buttons";
-import { Form, useNavigate } from "@remix-run/react";
-import TextInput from "../Box/TextInput";
 import Search from "~/assets/icons/Search.svg?react";
 import Sorting from "~/assets/icons/Sorting.svg?react";
 import { vars } from "~/styles/vars.css";
-import { TableVirtuoso } from "react-virtuoso";
+import { ApiResponseType, CursorResponse } from "~/types/api";
+import { spaceRoleLabel } from "~/types/enum.types";
+import { dayJsFormatter } from "~/utils/formatter";
+import {
+  objectToQueryParams,
+  omitUnusedSearchParams,
+  thousand,
+} from "~/utils/helpers";
+import Box from "../Box";
+import Buttons from "../Box/Buttons";
+import Loading from "../Box/Loading";
 import { TD, TH } from "../Box/Table";
+import TextInput from "../Box/TextInput";
+import { statisticsSpaceStyle } from "../Statistics/styles.css";
 
 const columns = [
   { name: "유저 ID", filterName: null },
@@ -25,8 +31,8 @@ const columns = [
   { name: "이메일", filterName: null },
   { name: "스페이스", filterName: null },
   { name: "유저타입", filterName: null },
-  { name: "프롬프트 요청수", filterName: null },
-  { name: "최근 접속", filterName: null },
+  { name: "프롬프트 요청수", filterName: "promptExecutedCount" },
+  { name: "최근 접속", filterName: "lastAccessedAt" },
   { name: "관리", filterName: null },
 ];
 
@@ -48,7 +54,7 @@ const getUserList = async (
     cache: "no-cache",
   });
   return (await res.json()) as ApiResponseType<
-    CursorResponse<SpaceStatisticsPromptListCursorType>
+    CursorResponse<UserListCursorType>
   >;
 };
 
@@ -152,25 +158,6 @@ export default function UserListComponent() {
           }
         />
       </Form>
-      <Flex marginBottom={"16px"}>
-        <p className={statisticsSpaceStyle.subTitle}>전체 프롬프트 통계</p>
-        <Div marginLeft={"auto"} display={"inherit"} gap={"4px"}>
-          <Buttons
-            backgroundColor={vars.colors["Primary/Primary 50"]}
-            color={vars.colors["Primary/Primary 500"]}
-            onClick={() => {}}
-          >
-            유저 통계 보기
-          </Buttons>
-          <Buttons
-            backgroundColor={vars.colors["Primary/Primary 50"]}
-            color={vars.colors["Primary/Primary 500"]}
-            onClick={() => {}}
-          >
-            스페이스 통계 보기
-          </Buttons>
-        </Div>
-      </Flex>
       <div className={loading ? statisticsSpaceStyle.loading : ""}>
         <TableVirtuoso
           style={{
@@ -215,12 +202,28 @@ export default function UserListComponent() {
             return (
               <>
                 <TD>{item.id}</TD>
-                <TD>{item.authorId}</TD>
                 <TD>{item.name}</TD>
-                <TD>{item.description}</TD>
-                <TD>{item.categoryId}</TD>
-                <TD>{item.viewCount}</TD>
-                <TD>{item.executeCount}</TD>
+                <TD>{item.email}</TD>
+                <TD>{item.spaceName}</TD>
+                <TD>
+                  {item.spaceMemberRoleType
+                    ? spaceRoleLabel[item.spaceMemberRoleType]
+                    : ""}
+                </TD>
+                <TD>{thousand(item.promptExecutedCount)}</TD>
+                <TD>{dayJsFormatter(item.lastAccessedAt)}</TD>
+                <TD>
+                  <Buttons
+                    theme={"primaryFilled"}
+                    size={"small"}
+                    padding={"6px 12px"}
+                    onClick={() => {
+                      navigate(`/user/list/info/${item.id}`);
+                    }}
+                  >
+                    자세히 보기
+                  </Buttons>
+                </TD>
               </>
             );
           }}

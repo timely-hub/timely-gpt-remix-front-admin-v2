@@ -2,6 +2,7 @@ import { Form, useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
 import {
   SpaceStatisticsPromptListCursorType,
   StatisticsListCursorQueryParamsType,
@@ -19,8 +20,14 @@ import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
+// import { LoaderFunctionArgs, json } from "@remix-run/node";
+// import { loader as PromptPackage } from '~/routes/space.create.prompt-package';
 
+// export const loader = async (args: LoaderFunctionArgs) => {
+//   const response = await PromptPackage(args)
+//   const data = await response.json()
+//   return json({ spaceDomain: args.params.id });
+// }
 const columns = [
   { name: "프롬프트ID", filterName: null },
   { name: "유저ID", filterName: null },

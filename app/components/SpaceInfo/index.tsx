@@ -3,10 +3,9 @@ import { useMemo, useState } from "react";
 import { loader } from "~/routes/space.list.info.$id";
 import { SpaceMainType } from "~/types/shared.types";
 import Box, { Div, Flex } from "../Box";
-import { statisticsSpaceStyle } from "../Statistics/styles.css";
 import Buttons from "../Box/Buttons";
+import { statisticsSpaceStyle } from "../Statistics/styles.css";
 import { spaceInfoStyles } from "./styles.css";
-import { Button } from "stories/Button";
 
 export default function SpaceInfoComponent() {
   const { spaceInfo } = useLoaderData<typeof loader>();

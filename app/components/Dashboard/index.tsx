@@ -145,7 +145,7 @@ export default function Dashboard() {
                   >
                     {data?.spaceRoleType
                       ? spaceRoleLabel[data.spaceRoleType]
-                      : "-"}
+                      : ""}
                   </TD>
                   <TD>{thousand(data.executeCount)}</TD>
                   <TD>{dayJsFormatter(data.createdAt)}</TD>

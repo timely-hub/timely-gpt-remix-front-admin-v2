@@ -1,10 +1,11 @@
 import localForage from "localforage";
-import Box from "~/components/Box";
-import { spaceCreateStyle } from "../styles.css";
-import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
-import useBulkState from "~/hooks/useBulkState";
 import { useEffect } from "react";
+import Box from "~/components/Box";
+import useBulkState from "~/hooks/useBulkState";
 import { ApiResponseType } from "~/types/api";
+import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
+import { callToast } from "~/zustand/toastSlice";
+import { spaceCreateStyle } from "../styles.css";
 
 const getSpaceMain = async () => {
   const response = await localForage.getItem("spaceMain");

@@ -2,6 +2,7 @@ import { Form, useLoaderData, useNavigate, useParams } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
 import {
   SpaceStatisticsMemberListCursorType,
   StatisticsListCursorQueryParamsType,
@@ -17,9 +18,9 @@ import TextInput from "~/components/Box/TextInput";
 import { loader } from "~/routes/statistics.user.$id";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
+import { spaceRoleLabel } from "~/types/enum.types";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
 
 const columns = [
   { name: "유저ID", filterName: null },
@@ -234,7 +235,7 @@ export default function UserStatistics() {
                 <TD>{item.id}</TD>
                 <TD>{item.memberName}</TD>
                 <TD>{item.memberEmail}</TD>
-                <TD>{item.roleType}</TD>
+                <TD>{item.roleType ? spaceRoleLabel[item.roleType] : "'"}</TD>
                 <TD>{item.executeCount}</TD>
                 <TD wrapSprinkles={{ display: "flex" }}>
                   {item.promptIdList?.length}개
