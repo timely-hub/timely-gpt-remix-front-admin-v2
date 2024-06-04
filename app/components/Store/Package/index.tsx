@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { PromptPackageListType } from "~/Services/space-controller/space-controller.types";
 import { Flex } from "~/components/Box";
@@ -6,10 +6,11 @@ import Buttons from "~/components/Box/Buttons";
 import ModalContainer from "~/components/Box/Modal/Container";
 import { TD, TH, Table } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
-import { loader } from "~/routes/store.prompt-package";
+import { loader } from "~/routes/store.prompt-package._index";
 
 export default function PackageComponent() {
-  const { storeCategoryList } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+  const { promptPackageList } = useLoaderData<typeof loader>();
   const [storeData, setStoreData] = useState<PromptPackageListType[]>();
   const [updateCategory, setUpdateCategory] = useState<number | string>({
     id: 0,
@@ -18,9 +19,9 @@ export default function PackageComponent() {
   const [modal, setModal] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!storeCategoryList) return;
-    setStoreData(storeCategoryList);
-  }, [storeCategoryList]);
+    if (!promptPackageList) return;
+    setStoreData(promptPackageList);
+  }, [promptPackageList]);
   return (
     <>
       {modal && (
@@ -52,7 +53,13 @@ export default function PackageComponent() {
                 <TD>
                   <Buttons
                     theme={"primaryFilled"}
-                    onClick={() => setModal(true)}
+                    onClick={() => {
+                      navigate(
+                        `/store/prompt-package/edit/${
+                          item.id
+                        }?label=${encodeURIComponent(item.label)}`
+                      );
+                    }}
                   >
                     편집
                   </Buttons>

@@ -13,6 +13,7 @@ export type PromptInfoType = {
   description: string;
   imageUrl: string;
   categoryId: number;
+  categoryLabel: string;
   llmModelType: string;
   llmModelCategoryType: string;
   viewCount: number;
@@ -20,4 +21,11 @@ export type PromptInfoType = {
   executeCount: number;
   createdAt: string;
   updatedAt: string;
+  member: PromptMemberType;
 };
+
+export interface PromptMemberType {
+  id: string;
+  name: string;
+  profileImageUrl: string;
+}

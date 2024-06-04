@@ -8,7 +8,7 @@ export const promptBoxStyle = appStyles({
     borderRadius: "16px",
     padding: "24px 20px",
     backgroundColor: vars.colors["Grayscale/White"],
-    width: "24%",
+    width: "calc(25% - 16px)",
   },
   title: {
     ...getTextStyles("Grayscale/Black", "Body/16px/16px.700"),
@@ -17,6 +17,9 @@ export const promptBoxStyle = appStyles({
   description: {
     ...getTextStyles("Grayscale/Gray 400", "Body/14px/14px.400"),
     marginBottom: "16px",
+  },
+  smallDescription: {
+    ...getTextStyles("Grayscale/Gray 300", "Body/12px/12px.400"),
   },
   name: {
     ...getTextStyles("Grayscale/Gray 300", "Body/12px/12px.400"),
