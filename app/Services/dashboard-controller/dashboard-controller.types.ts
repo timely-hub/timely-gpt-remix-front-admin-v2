@@ -1,4 +1,5 @@
-import { MemberType, PromptType, SpaceType } from "~/types/shared.types";
+import { StatisticsMemberType } from "~/components/Dashboard/types";
+import { PromptType, SpaceType } from "~/types/shared.types";
 
 export type DashBoardType = {
   totalMemberCount: number;
@@ -7,7 +8,7 @@ export type DashBoardType = {
   todayTotalCreditUsed: number;
   thisMonthTotalCreditUsed: number;
   bestPromptList: PromptType[];
-  recentJoinMemberList: MemberType[];
+  recentJoinMemberList: StatisticsMemberType[];
   recentCreatedSpaceList: SpaceType[];
   recentCreatedPromptList: PromptType[];
 };

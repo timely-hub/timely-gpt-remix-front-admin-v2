@@ -2,7 +2,11 @@ import { LoaderFunctionArgs } from "@remix-run/node";
 import { CursorResponse } from "~/types/api";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import { SpaceStatisticsPromptListCursorType, StatisticsListCursorQueryParamsType, spaceListCursorQueryDefault } from "./space-statistics-controller.types";
+import {
+  SpaceStatisticsPromptListCursorType,
+  StatisticsListCursorQueryParamsType,
+  spaceListCursorQueryDefault,
+} from "./space-statistics-controller.types";
 
 export const getPromptStatisticsList =
   (args: LoaderFunctionArgs) =>
@@ -16,9 +20,7 @@ export const getPromptStatisticsList =
     console.log(`/admin/stats/space/${id}/prompt?${parsed}`);
     const response = await fetcher<
       CursorResponse<SpaceStatisticsPromptListCursorType>
-    >(`/admin/stats/space/${id}/prompt?${parsed}`, {
-      cache: "no-cache",
-    });
+    >(`/admin/stats/space/${id}/prompt?${parsed}`, {});
     console.log(response);
     return response;
   };

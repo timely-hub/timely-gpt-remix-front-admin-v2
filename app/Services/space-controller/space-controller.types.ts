@@ -29,3 +29,15 @@ export interface PromptMemberType {
   name: string;
   profileImageUrl: string;
 }
+
+export type MemberSearchType = {
+  email: string;
+};
+
+export const spaceMemberSearchQueryDefault = {
+  keyword: "",
+};
+
+export type SpaceMemberSearchQueryParamsType = Partial<
+  typeof spaceMemberSearchQueryDefault
+>;

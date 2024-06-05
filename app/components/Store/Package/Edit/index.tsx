@@ -7,13 +7,13 @@ import OutlineEye from "~/assets/icons/OutlineEye.svg?react";
 import Box, { Div, Flex } from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
 import Checkbox from "~/components/Box/Checkbox";
-import ModalContainer from "~/components/Box/Modal/Container";
 import TextInput from "~/components/Box/TextInput";
 import { spaceCreateStyle } from "~/components/SpaceCreate/styles.css";
 import { loader } from "~/routes/store.prompt-package.edit.$id";
 import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
 import { llmModelCategoryTypeLabel } from "~/types/enum.types";
+import ModalPromptComponent from "./Modal";
 
 export default function PromptPackageEditComponent() {
   const { label, response } = useLoaderData<typeof loader>();
@@ -44,16 +44,13 @@ export default function PromptPackageEditComponent() {
     });
   };
 
+  const closeModal = () => {
+    setModal(false);
+  };
+
   return (
     <>
-      {modal && (
-        <ModalContainer
-          onClose={() => setModal(false)}
-          title={"도구 카테고리 편집"}
-        >
-          <>dfdf</>
-        </ModalContainer>
-      )}
+      {modal && <ModalPromptComponent onClose={closeModal} />}
       <Box margin={"0 auto"} padding={"24px 0"}>
         <Div className={spaceCreateStyle.title}>{label} 꾸러미 편집</Div>
         <Flex marginBottom={"16px"} justifyContent={"flex-end"} gap={"8px"}>

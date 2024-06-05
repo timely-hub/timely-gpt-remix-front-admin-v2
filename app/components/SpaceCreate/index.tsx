@@ -1,6 +1,10 @@
-import { useNavigate } from "@remix-run/react";
+import { useFetcher, useNavigate } from "@remix-run/react";
 import localForage from "localforage";
+import { debounce } from "lodash-es";
+import { useCallback, useEffect, useState } from "react";
+import { MemberSearchType } from "~/Services/space-controller/space-controller.types";
 import useBulkState from "~/hooks/useBulkState";
+import { loader } from "~/routes/api.get-member-live";
 import { vars } from "~/styles/vars.css";
 import { spaceGradeLabel } from "~/types/enum.types";
 import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
@@ -14,7 +18,37 @@ import { spaceCreateStyle } from "./styles.css";
 
 export default function SpaceCreate() {
   const navigate = useNavigate();
+  const fetcher = useFetcher<typeof loader>();
   const { state, setState } = useBulkState<SpaceMainType>(defaultSpaceMainType);
+  const [memberData, setMemberData] = useState<
+    MemberSearchType[] | undefined | null
+  >();
+
+  useEffect(() => {
+    if (fetcher.state === "idle") {
+      setMemberData(fetcher.data?.response);
+      console.log(memberData);
+    }
+  }, [fetcher, memberData]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedFetchMembers = useCallback(
+    debounce((search: string) => {
+      const formData = new FormData();
+      formData.append("search", search);
+      fetcher.submit(formData, {
+        action: `/api/get-member-live?search=${search}`,
+      });
+    }, 300), // 300ms 지연
+    []
+  );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setState("ownerId", value);
+    debouncedFetchMembers(value);
+  };
+
   return (
     <Box margin={"0 auto"} padding={"32px 0"} width={"332px"}>
       <div className={spaceCreateStyle.title}>필수 정보 입력</div>
@@ -44,9 +78,7 @@ export default function SpaceCreate() {
           <TextInput
             placeholder="계정 검색"
             wrapSprinkles={{ width: "100%" }}
-            onChange={(e) => {
-              setState("ownerId", e.target.value);
-            }}
+            onChange={handleSearchChange}
           ></TextInput>
         </Box>
         <Box>

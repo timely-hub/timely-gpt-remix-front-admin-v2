@@ -17,7 +17,7 @@ export type PromptType = {
   createdAt: string;
 };
 
-export type MemberType = {
+export type StatisticsMemberType = {
   name: string;
   email: string;
   spaceName: string;

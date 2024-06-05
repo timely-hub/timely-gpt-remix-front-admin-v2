@@ -3,12 +3,24 @@ import { appStyles } from "./layer.css";
 import { vars } from "./vars.css";
 
 export const promptBoxStyle = appStyles({
+  wrap: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "8px",
+  },
   box: {
     border: `1px solid ${vars.colors["Grayscale/Gray 100"]}`,
     borderRadius: "16px",
     padding: "24px 20px",
     backgroundColor: vars.colors["Grayscale/White"],
     width: "calc(25% - 16px)",
+  },
+  modalBox: {
+    border: `1px solid ${vars.colors["Grayscale/Gray 100"]}`,
+    borderRadius: "16px",
+    padding: "24px 20px",
+    backgroundColor: vars.colors["Grayscale/White"],
+    width: "100%",
   },
   title: {
     ...getTextStyles("Grayscale/Black", "Body/16px/16px.700"),

@@ -8,5 +8,7 @@ export const getPromptInfo =
     const response = await fetcher<PromptInfoType[]>(
       `/admin/master/category/${id}/prompt/list`
     );
+    console.log(response);
+
     return response;
   };

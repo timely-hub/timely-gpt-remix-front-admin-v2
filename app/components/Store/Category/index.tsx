@@ -109,6 +109,7 @@ export default function CategoryManagementComponent() {
                 <TD>
                   <Buttons
                     theme={"primaryFilled"}
+                    size={"small"}
                     onClick={() => {
                       setCategoryId(item.id);
                       setUpdateCategoryData({

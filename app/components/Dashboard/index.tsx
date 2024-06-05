@@ -8,14 +8,19 @@ import { thousand } from "~/utils/helpers";
 import Box from "../Box";
 import { TD, TH, Table } from "../Box/Table";
 import { dashboardStyle } from "./styles.css";
-import { MemberType, PromptType, SpaceType, TotalCountProps } from "./types";
+import {
+  PromptType,
+  SpaceType,
+  StatisticsMemberType,
+  TotalCountProps,
+} from "./types";
 
 export default function Dashboard() {
   const response = useLoaderData<typeof loader>();
   const [totalData, setTotalData] = useState<TotalCountProps>();
   const [bestPromptData, setBestPromptData] = useState<PromptType[]>();
   const [recentJoinMemberData, setRecentJoinMemberData] =
-    useState<MemberType[]>();
+    useState<StatisticsMemberType[]>();
   const [recentCreateSpaceData, setRecentCreateSpaceData] =
     useState<SpaceType[]>();
   const [recentCreatePromptData, setRecentCreatePromptData] =
