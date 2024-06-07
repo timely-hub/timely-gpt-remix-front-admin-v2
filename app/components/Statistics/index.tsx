@@ -2,6 +2,11 @@ import { Form, useLocation, useNavigate } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
+import {
+  SpaceListCursorType,
+  StatisticsListCursorQueryParamsType,
+  spaceListCursorQueryDefault,
+} from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import Search from "~/assets/icons/Search.svg?react";
 import Sorting from "~/assets/icons/Sorting.svg?react";
 import { vars } from "~/styles/vars.css";
@@ -18,11 +23,6 @@ import Loading from "../Box/Loading";
 import { TD, TH } from "../Box/Table";
 import TextInput from "../Box/TextInput";
 import { statisticsSpaceStyle } from "./styles.css";
-import {
-  SpaceListCursorType,
-  StatisticsListCursorQueryParamsType,
-  spaceListCursorQueryDefault,
-} from "~/Services/space-statistics-controller/space-statistics-controller.types";
 
 const columns = [
   { name: "스페이스명", filterName: null },
@@ -117,7 +117,6 @@ export default function Statistics() {
   };
 
   const handleFiltering = (name: string) => {
-    console.log(name);
     setParsedQueryParams((prev) => ({
       ...prev,
       basis: name,
@@ -135,6 +134,7 @@ export default function Statistics() {
       >
         <p className={statisticsSpaceStyle.title}>스페이스 선택</p>
         <Buttons
+          size={"small"}
           onClick={() => {
             refetch();
             setLoading(true);
@@ -213,6 +213,8 @@ export default function Statistics() {
                 <TD>{dayJsFormatter(item?.expiredAt)}</TD>
                 <TD>
                   <Buttons
+                    size={"tdSmall"}
+                    borderRadius={"4px"}
                     onClick={() => {
                       if (pathname === "/space/list") {
                         navigate(`/space/list/info/${item?.id}`);

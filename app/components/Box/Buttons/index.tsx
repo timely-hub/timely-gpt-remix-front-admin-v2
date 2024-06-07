@@ -20,7 +20,7 @@ interface ButtonsProps
   > {
   pending?: boolean;
   theme?: keyof typeof buttonsStyles;
-  size?: "small" | "large";
+  size?: "tdSmall" | "small" | "large";
   label?: string;
 }
 

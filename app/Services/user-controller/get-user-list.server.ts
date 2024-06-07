@@ -17,7 +17,6 @@ export const getUserList =
     );
     const parsed = objectToQueryParams({ ...queryParams });
     const fetcher = await loadFetcher(args);
-    console.log(`/admin/member/list?${parsed}`);
     const response = await fetcher<CursorResponse<UserListCursorType>>(
       `/admin/member/list?${parsed}`,
       {}

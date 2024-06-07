@@ -17,7 +17,6 @@ export const getSpaceStatisticsList =
     );
     const parsed = objectToQueryParams({ ...queryParams });
     const fetcher = await loadFetcher(args);
-    console.log(`/admin/stats/space/list?${parsed}`);
     const response = await fetcher<CursorResponse<SpaceListCursorType>>(
       `/admin/stats/space/list?${parsed}`,
       {}

@@ -1,23 +1,25 @@
-import { Form, useNavigate } from "@remix-run/react";
+import { Form } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
+import { TableVirtuoso } from "react-virtuoso";
 import {
   StorePromptListQueryParamsType,
   StorePromptListType,
   storePromptListQueryDefault,
 } from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import Search from "~/assets/icons/Search.svg?react";
+import Sorting from "~/assets/icons/Sorting.svg?react";
 import Box from "~/components/Box";
 import Buttons from "~/components/Box/Buttons";
 import Loading from "~/components/Box/Loading";
+import { TD, TH } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
 import { statisticsSpaceStyle } from "~/components/Statistics/styles.css";
-import { ApiResponseType, CursorResponse } from "~/types/api";
-import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import Search from "~/assets/icons/Search.svg?react";
-import { TableVirtuoso } from "react-virtuoso";
 import { vars } from "~/styles/vars.css";
-import { TD, TH } from "~/components/Box/Table";
-import Sorting from "~/assets/icons/Sorting.svg?react";
+import { ApiResponseType, CursorResponse } from "~/types/api";
+import { dayJsFormatter } from "~/utils/formatter";
+import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
+import { callToast } from "~/zustand/toastSlice";
 
 const columns = [
   { name: "프롬프트ID", filterName: null },
@@ -53,8 +55,18 @@ const getStorePromptList = async (
   >;
 };
 
+const deletePrompt = async (id: string | number) => {
+  const response = await fetch(`/api/prompt/${id}`, {
+    method: "DELETE",
+    body: JSON.stringify({ id }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return (await response.json()) as ApiResponseType<string>;
+};
+
 export default function PromptManagementComponent() {
-  const navigate = useNavigate();
   const virtuoso = useRef(null);
   const [queryParams, setQueryParams] = useState<QueryParamsType>({
     keyword: "",
@@ -129,6 +141,7 @@ export default function PromptManagementComponent() {
       >
         <p className={statisticsSpaceStyle.title}>스토어 프롬프트 목록</p>
         <Buttons
+          size={"small"}
           onClick={() => {
             refetch();
             setLoading(true);
@@ -198,12 +211,32 @@ export default function PromptManagementComponent() {
             return (
               <>
                 <TD>{item.id}</TD>
-                <TD>{item.authorId}</TD>
+                <TD>{item.member.name}</TD>
                 <TD>{item.name}</TD>
                 <TD>{item.description}</TD>
                 <TD>{item.categoryId}</TD>
                 <TD>{item.viewCount}</TD>
                 <TD>{item.executeCount}</TD>
+                <TD>{dayJsFormatter(item.createdAt)}</TD>
+                <TD>
+                  <Buttons
+                    size={"tdSmall"}
+                    borderRadius={"4px"}
+                    onClick={async () => {
+                      const response = await deletePrompt(item.id);
+                      if (response.success) {
+                        refetch();
+                        setLoading(true);
+                        callToast(
+                          "프롬프트가 성공적으로 삭제되었습니다.",
+                          "success"
+                        );
+                      }
+                    }}
+                  >
+                    삭제
+                  </Buttons>
+                </TD>
               </>
             );
           }}

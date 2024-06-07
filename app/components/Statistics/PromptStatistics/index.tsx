@@ -147,6 +147,7 @@ export default function PromptStatistics() {
           {spaceDomainData?.name} 생성된 프롬프트 통계
         </p>
         <Buttons
+          size={"small"}
           onClick={() => {
             refetch();
             setLoading(true);
@@ -176,6 +177,7 @@ export default function PromptStatistics() {
         <p className={statisticsSpaceStyle.subTitle}>전체 프롬프트 통계</p>
         <Div marginLeft={"auto"} display={"inherit"} gap={"4px"}>
           <Buttons
+            size={"small"}
             backgroundColor={vars.colors["Primary/Primary 50"]}
             color={vars.colors["Primary/Primary 500"]}
             onClick={() => {
@@ -185,6 +187,7 @@ export default function PromptStatistics() {
             유저 통계 보기
           </Buttons>
           <Buttons
+            size={"small"}
             backgroundColor={vars.colors["Primary/Primary 50"]}
             color={vars.colors["Primary/Primary 500"]}
             onClick={() => {

@@ -1,5 +1,6 @@
 import { useLoaderData, useNavigate, useRevalidator } from "@remix-run/react";
 import { useEffect, useMemo, useState } from "react";
+import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
 import {
   SpaceStatisticsMemberListCursorType,
   SpaceStatisticsPromptListCursorType,
@@ -16,7 +17,6 @@ import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 import { recentStatisticsStyle } from "./styles.css";
-import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
 
 const recentUserColumn = [
   { name: "이름", filterName: null },
@@ -84,6 +84,7 @@ export default function SpaceStatistics() {
           {spaceDomainData?.name} 스페이스 통계
         </p>
         <Buttons
+          size={"small"}
           onClick={() => {
             revalidator.revalidate();
             if (revalidator.state === "loading") {
@@ -100,6 +101,7 @@ export default function SpaceStatistics() {
         <p className={statisticsSpaceStyle.subTitle}>통계 내역</p>
         <Div marginLeft={"auto"} display={"inherit"} gap={"4px"}>
           <Buttons
+            size={"small"}
             backgroundColor={vars.colors["Primary/Primary 50"]}
             color={vars.colors["Primary/Primary 500"]}
             onClick={() => {
@@ -109,6 +111,7 @@ export default function SpaceStatistics() {
             유저 통계 보기
           </Buttons>
           <Buttons
+            size={"small"}
             backgroundColor={vars.colors["Primary/Primary 50"]}
             color={vars.colors["Primary/Primary 500"]}
             onClick={() => {
@@ -187,7 +190,7 @@ export default function SpaceStatistics() {
                   <TD>{prompt.promptId}</TD>
                   <TD>{prompt.name}</TD>
                   <TD>{prompt.description}</TD>
-                  <TD>{prompt.categoryLabel}</TD>
+                  <TD theme={"yellowFilled"}>{prompt.categoryLabel}</TD>
                   <TD>{dayJsFormatter(prompt.createdAt)}</TD>
                   <TD>{prompt.viewCount}</TD>
                   <TD>{prompt.executeCount}</TD>

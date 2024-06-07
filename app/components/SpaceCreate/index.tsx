@@ -32,7 +32,6 @@ export default function SpaceCreate() {
   useEffect(() => {
     if (fetcher.state === "idle" && !isFetchMembersDisabled) {
       setMemberData(fetcher.data?.response);
-      console.log(memberData);
     }
   }, [fetcher, memberData, isFetchMembersDisabled]);
 
@@ -41,7 +40,6 @@ export default function SpaceCreate() {
     debounce((keyword: string) => {
       const formData = new FormData();
       formData.append("keyword", keyword);
-      console.log(keyword);
       fetcher.submit(formData, {
         action: `/api/get-member-live?keyword=${keyword}`,
       });

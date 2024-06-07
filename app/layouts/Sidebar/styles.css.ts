@@ -104,7 +104,6 @@ export const adminPageSideStyle = appStyles({
     display: "flex",
     flexDirection: "column",
     padding: "8px 16px",
-    cursor: "pointer",
     textDecoration: "none",
   },
   submenuWrap: {

@@ -23,9 +23,13 @@ import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
 import { llmModelCategoryTypeLabel } from "~/types/enum.types";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
+import { callToast } from "~/zustand/toastSlice";
 import { buttonLoadingStyle } from "../styles.css";
 
 interface ModalPromptProps {
+  id: string;
+  label: string;
+  existPromptIdList: number[];
   onClose: () => void;
 }
 
@@ -35,6 +39,11 @@ type QueryParamsType = {
   basis: string;
   name: string;
   categoryId: string;
+};
+
+type PromptPackageParamsType = {
+  label: string;
+  promptIdList: number[];
 };
 
 const getMyPackagePromptModalList = async (
@@ -51,11 +60,31 @@ const getMyPackagePromptModalList = async (
   >;
 };
 
-export default function ModalPromptComponent({ onClose }: ModalPromptProps) {
+const updatePromptPackage = async (
+  id: string | number,
+  data: PromptPackageParamsType
+) => {
+  const response = await fetch(`/api/update-prompt-package/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  const responseJson = (await response.json()) as ApiResponseType<unknown>;
+  return responseJson;
+};
+
+export default function ModalPromptComponent({
+  id,
+  label,
+  existPromptIdList,
+  onClose,
+}: ModalPromptProps) {
   const virtuoso = useRef(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
-  const [activeIds, setActiveIds] = useState<number[]>([]);
+  const [activeIds, setActiveIds] = useState<Set<number>>(new Set());
   const formRef = useRef<HTMLFormElement>(null);
   const [queryParams, setQueryParams] = useState<QueryParamsType>({
     keyword: "",
@@ -118,10 +147,10 @@ export default function ModalPromptComponent({ onClose }: ModalPromptProps) {
 
   const handleItemClick = (id: number) => {
     setActiveIds((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((activeId) => activeId !== id);
+      if (prev.has(id)) {
+        return new Set([...prev].filter((activeId) => activeId !== id));
       } else {
-        return [...prev, id];
+        return new Set([...prev, id]);
       }
     });
 
@@ -270,16 +299,36 @@ export default function ModalPromptComponent({ onClose }: ModalPromptProps) {
         </Box>
         <Flex justifyContent={"space-between"}>
           <Div display={"inherit"} alignItems={"center"} gap={"8px"}>
-            <Buttons theme={"dangerGhostFilled"} size={"small"}>
+            <Buttons
+              theme={"dangerGhostFilled"}
+              size={"small"}
+              onClick={() => {
+                setActiveIds(new Set());
+                setCheckedItems({});
+              }}
+            >
               전체 해제
             </Buttons>
-            <p>({activeIds.length} 개 선택)</p>
+            <p>({activeIds.size} 개 선택)</p>
           </Div>
           <Div display={"inherit"} gap={"8px"}>
-            <Buttons theme={"grayscaleFilled"} size={"small"}>
+            <Buttons theme={"grayscaleFilled"} size={"small"} onClick={onClose}>
               취소
             </Buttons>
-            <Buttons theme={"primaryFilled"} size={"small"}>
+            <Buttons
+              theme={"primaryFilled"}
+              size={"small"}
+              onClick={async () => {
+                const response = await updatePromptPackage(id, {
+                  label,
+                  promptIdList: Array.from(activeIds).concat(existPromptIdList),
+                });
+                if (response.success) {
+                  callToast("꾸러미가 성공적으로 추가되었습니다.", "success");
+                  onClose();
+                }
+              }}
+            >
               추가하기
             </Buttons>
           </Div>

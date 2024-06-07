@@ -14,6 +14,7 @@ import { loader } from "~/routes/space.create.prompt-package";
 import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
 import { llmModelCategoryTypeLabel } from "~/types/enum.types";
+import { callToast } from "~/zustand/toastSlice";
 import { spaceCreateStyle } from "../styles.css";
 import { promptPackageStyle } from "./styles.css";
 
@@ -74,7 +75,6 @@ export default function PromptPackage() {
                       ...toggleItems,
                       [item.id]: isChecked,
                     });
-
                     if (isChecked) {
                       const formData = new FormData();
                       formData.append("id", item.id.toString());
@@ -123,6 +123,10 @@ export default function PromptPackage() {
       <Div textAlign={"center"}>
         <Buttons
           onClick={() => {
+            if (accumulatedData.length === 0) {
+              callToast("꾸러미를 선택해주세요", "error");
+              return;
+            }
             localForage.setItem("promptData", accumulatedData);
             navigate("/space/create/prompt-recommend");
           }}

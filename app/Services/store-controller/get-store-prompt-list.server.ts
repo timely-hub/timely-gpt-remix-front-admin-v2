@@ -1,12 +1,12 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { CursorResponse } from "~/types/api";
+import { loadFetcher } from "~/utils/fetcher";
+import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import {
   StorePromptListQueryParamsType,
   StorePromptListType,
   spaceListCursorQueryDefault,
 } from "../space-statistics-controller/space-statistics-controller.types";
-import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import { loadFetcher } from "~/utils/fetcher";
-import { CursorResponse } from "~/types/api";
 
 export const getStorePromptList =
   (args: LoaderFunctionArgs) =>
@@ -17,11 +17,9 @@ export const getStorePromptList =
     );
     const parsed = objectToQueryParams({ ...queryParams });
     const fetcher = await loadFetcher(args);
-    console.log(`/prompt/list?${parsed}`);
     const response = await fetcher<CursorResponse<StorePromptListType>>(
       `/prompt/list?${parsed}`,
       {}
     );
-    console.log(response);
     return response;
   };

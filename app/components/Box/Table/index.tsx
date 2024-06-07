@@ -6,6 +6,7 @@ import {
   rainbowSprinkles,
 } from "~/styles/rainbow-sprinkles.css";
 import { Flex } from "..";
+import { spanStyles } from "../Buttons/styles.css";
 import { tableStyles } from "./styles.css";
 
 export const Table = ({
@@ -67,26 +68,25 @@ interface TDProps
   children?: React.ReactNode;
   className?: string;
   wrapSprinkles?: Sprinkles;
-  spanType?: "roleOwner" | "roleOther" | "statusApproved" | "statusPending";
+  theme?: keyof typeof spanStyles;
 }
 
 export const TD = ({
   children,
   className,
-  spanType,
+  theme = "default",
   wrapSprinkles,
 }: TDProps) => {
+  const themeClass = theme
+    ? spanStyles[theme as keyof typeof spanStyles] ?? ""
+    : "";
   const { style: wrapStyle } = rainbowSprinkles({
     ...wrapSprinkles,
   });
   return (
     <td className={clsx(tableStyles.td, className)}>
       <div style={wrapStyle}>
-        {spanType ? (
-          <span className={tableStyles[`${spanType}`]}>{children}</span>
-        ) : (
-          children
-        )}
+        <span className={themeClass}>{children}</span>
       </div>
     </td>
   );

@@ -237,8 +237,17 @@ export default function UserStatistics() {
                 <TD>{item.memberEmail}</TD>
                 <TD>{item.roleType ? spaceRoleLabel[item.roleType] : "'"}</TD>
                 <TD>{item.executeCount}</TD>
-                <TD wrapSprinkles={{ display: "flex" }}>
+                <TD>
                   {item.promptIdList?.length}개
+                  {item.promptIdList && item.promptIdList?.length > 0 && (
+                    <Buttons
+                      size={"tdSmall"}
+                      borderRadius={"4px"}
+                      marginLeft={"4px"}
+                    >
+                      프롬프트 보기
+                    </Buttons>
+                  )}
                 </TD>
               </>
             );

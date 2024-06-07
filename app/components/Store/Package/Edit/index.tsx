@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useRevalidator } from "@remix-run/react";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { PromptInfoType } from "~/Services/space-controller/space-controller.types";
@@ -16,10 +16,12 @@ import { llmModelCategoryTypeLabel } from "~/types/enum.types";
 import ModalPromptComponent from "./Modal";
 
 export default function PromptPackageEditComponent() {
-  const { label, response } = useLoaderData<typeof loader>();
+  const revalidator = useRevalidator();
+  const { id, label, response } = useLoaderData<typeof loader>();
   const [promptDataList, setpromptDataList] = useState<PromptInfoType[]>();
   const [checkedItems, setCheckedItems] = useState<Record<number, boolean>>({});
   const [activeIds, setActiveIds] = useState<number[]>([]);
+  const [existIds, setExistIds] = useState<number[]>([]);
   const [modal, setModal] = useState<boolean>(false);
 
   useEffect(() => {
@@ -46,11 +48,19 @@ export default function PromptPackageEditComponent() {
 
   const closeModal = () => {
     setModal(false);
+    revalidator.revalidate();
   };
 
   return (
     <>
-      {modal && <ModalPromptComponent onClose={closeModal} />}
+      {modal && (
+        <ModalPromptComponent
+          onClose={closeModal}
+          id={id}
+          label={label}
+          existPromptIdList={existIds}
+        />
+      )}
       <Box margin={"0 auto"} padding={"24px 0"}>
         <Div className={spaceCreateStyle.title}>{label} 꾸러미 편집</Div>
         <Flex marginBottom={"16px"} justifyContent={"flex-end"} gap={"8px"}>
@@ -83,7 +93,11 @@ export default function PromptPackageEditComponent() {
             <Buttons
               theme={"primaryFilled"}
               size={"small"}
-              onClick={() => setModal(true)}
+              onClick={() => {
+                const existIdsList = promptDataList?.map((item) => item.id);
+                setModal(true);
+                setExistIds(existIdsList || []);
+              }}
             >
               추가
             </Buttons>

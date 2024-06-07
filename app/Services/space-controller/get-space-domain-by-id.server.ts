@@ -48,6 +48,5 @@ export const getSpaceDomain =
   (args: LoaderFunctionArgs) => async (id: string) => {
     const fetcher = await loadFetcher(args);
     const response = await fetcher<SpaceInfoType>(`/space/${id}`);
-    console.log(response);
     return response;
   };

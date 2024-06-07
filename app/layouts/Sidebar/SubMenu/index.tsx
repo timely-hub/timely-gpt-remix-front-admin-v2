@@ -19,8 +19,7 @@ export type MenuProps = {
 
 export const SubMenu = ({ item }: { item: MenuProps }) => {
   const pathname = useLocation().pathname;
-  const [mainPath, subPath] = pathname.split("/");
-  const path = `/${mainPath}/${subPath}`;
+  const [mainPath] = pathname.split("/");
   const [selected, setSelected] = useState<string>();
   const [subNav, setSubNav] = useState(false);
   const showSubNav = () => setSubNav(!subNav);
@@ -67,7 +66,7 @@ export const SubMenu = ({ item }: { item: MenuProps }) => {
                   <span
                     className={clsx(
                       adminPageSideStyle.submenuTitle,
-                      pathname === item.href || path === item.href
+                      pathname === item.href || pathname.startsWith(item.href)
                         ? adminPageSideStyle.subMenuSelected
                         : null
                     )}

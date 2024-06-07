@@ -1,4 +1,5 @@
 import { ComplexStyleRule, keyframes } from "@vanilla-extract/css";
+import { getTextStyles } from "~/styles/helpers";
 import { layerStyle } from "~/styles/layer.css";
 import { vars } from "~/styles/vars.css";
 
@@ -11,6 +12,11 @@ const rotate = keyframes({
   },
 });
 export const sizes = {
+  tdSmall: layerStyle({
+    padding: "1px 4px",
+    ...vars.typography["Body/12px/12px.400"],
+    borderRadius: "4px",
+  }),
   small: layerStyle({
     padding: "8px 16px",
     ...vars.typography["Body/14px/14px.500"],
@@ -115,6 +121,36 @@ const buttonColors = {
   },
 } as const;
 
+const spanColors = {
+  default: {
+    ...getTextStyles("Grayscale/Black", "Body/14px/14px.400"),
+  },
+  greenFilled: {
+    backgroundColor: vars.colors["Green/Green 100"],
+    borderRadius: "100px",
+    padding: "2px 8px",
+    ...getTextStyles("Grayscale/Gray 500", "Body/12px/12px.500"),
+  },
+  yellowFilled: {
+    backgroundColor: vars.colors["Yellow/Yellow 100"],
+    borderRadius: "100px",
+    padding: "2px 8px",
+    ...getTextStyles("Yellow/Yellow 500", "Body/12px/12px.500"),
+  },
+  primaryFilled: {
+    backgroundColor: vars.colors["Grayscale/Gray 50"],
+    borderRadius: "100px",
+    padding: "2px 8px",
+    ...getTextStyles("Primary/Primary 500", "Body/12px/12px.500"),
+  },
+  grayScaleFilled: {
+    backgroundColor: vars.colors["Grayscale/Gray 50"],
+    borderRadius: "100px",
+    padding: "2px 8px",
+    ...getTextStyles("Grayscale/Gray 500", "Body/12px/12px.500"),
+  },
+};
+
 const buttonsStyles = {
   primaryFilled: layerStyle({
     ...buttonColors.primaryFilled,
@@ -127,6 +163,24 @@ const buttonsStyles = {
   }),
   dangerGhostFilled: layerStyle({
     ...buttonColors.dangerGhostFilled,
+  }),
+};
+
+export const spanStyles = {
+  default: layerStyle({
+    ...spanColors.default,
+  }),
+  greenFilled: layerStyle({
+    ...spanColors.greenFilled,
+  }),
+  yellowFilled: layerStyle({
+    ...spanColors.yellowFilled,
+  }),
+  primaryFilled: layerStyle({
+    ...spanColors.primaryFilled,
+  }),
+  grayScaleFilled: layerStyle({
+    ...spanColors.grayScaleFilled,
   }),
 };
 

@@ -13,18 +13,20 @@ import { callToast } from "~/zustand/toastSlice";
 export type CategoryUpdateType = {
   label: string;
   description: string;
+  method: string;
 };
 
 const updateCategory = async (
   id: string | number,
-  data: CategoryUpdateType
+  data: CategoryUpdateType,
+  method: string
 ) => {
   const response = await fetch(`/api/update-category/${id}`, {
-    method: "PUT",
+    method: method,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ ...data, method }),
   });
   const responseJson = (await response.json()) as ApiResponseType<unknown>;
   return responseJson;
@@ -38,6 +40,7 @@ export default function CategoryManagementComponent() {
     useState<CategoryUpdateType>({
       label: "",
       description: "",
+      method: "PUT",
     });
   const [modal, setModal] = useState<boolean>(false);
 
@@ -72,14 +75,32 @@ export default function CategoryManagementComponent() {
             }
             placeholder="카테고리 설명을 입력해주세요."
           />
-          <Flex gap={"8px"}>
-            <Buttons theme="grayscaleFilled">삭제하기</Buttons>
+          <Flex gap={"8px"} justifyContent={"center"}>
             <Buttons
+              theme="grayscaleFilled"
+              size={"small"}
+              onClick={async () => {
+                const response = await updateCategory(
+                  categoryId,
+                  updateCategoryData,
+                  "DELETE"
+                );
+                if (response.success) {
+                  callToast("카테고리가 성공적으로 삭제되었습니다.", "success");
+                  setModal(false);
+                }
+              }}
+            >
+              삭제
+            </Buttons>
+            <Buttons
+              size={"small"}
               theme="primaryFilled"
               onClick={async () => {
                 const response = await updateCategory(
                   categoryId,
-                  updateCategoryData
+                  updateCategoryData,
+                  "PUT"
                 );
                 if (response.success) {
                   callToast("카테고리가 성공적으로 변경되었습니다.", "success");
@@ -87,7 +108,7 @@ export default function CategoryManagementComponent() {
                 }
               }}
             >
-              변경하기
+              변경
             </Buttons>
           </Flex>
         </ModalContainer>
@@ -109,12 +130,13 @@ export default function CategoryManagementComponent() {
                 <TD>
                   <Buttons
                     theme={"primaryFilled"}
-                    size={"small"}
+                    size={"tdSmall"}
                     onClick={() => {
                       setCategoryId(item.id);
                       setUpdateCategoryData({
                         label: item.label,
                         description: item.description,
+                        method: "PUT",
                       });
                       setModal(true);
                     }}

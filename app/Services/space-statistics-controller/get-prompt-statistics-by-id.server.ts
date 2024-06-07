@@ -17,10 +17,8 @@ export const getPromptStatisticsList =
     );
     const parsed = objectToQueryParams({ ...queryParams });
     const fetcher = await loadFetcher(args);
-    console.log(`/admin/stats/space/${id}/prompt?${parsed}`);
     const response = await fetcher<
       CursorResponse<SpaceStatisticsPromptListCursorType>
     >(`/admin/stats/space/${id}/prompt?${parsed}`, {});
-    console.log(response);
     return response;
   };

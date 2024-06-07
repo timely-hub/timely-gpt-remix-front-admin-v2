@@ -75,7 +75,6 @@ export const responseParser = async <T = unknown>(
       | ErrorResponse
       | ValidationExceptionResponse;
     if (isValidationExceptionResponse(errorResponse)) {
-      console.log("errorResponse", errorResponse);
       return {
         success: false,
         status: response.status,

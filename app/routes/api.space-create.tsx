@@ -4,6 +4,5 @@ import { createSpace } from "~/Services/space-controller/space-create.server";
 export const action = async (args: LoaderFunctionArgs) => {
   const cloneRequest = args.request.clone();
   const data = await cloneRequest.json();
-  console.log(data);
   return await createSpace(args)(data);
 };

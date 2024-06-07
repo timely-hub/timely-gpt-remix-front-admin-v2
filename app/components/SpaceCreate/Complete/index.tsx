@@ -34,7 +34,6 @@ export default function SpaceComplete() {
 
   useEffect(() => {
     createSpace(state).then((response) => {
-      console.log(state);
       if (response.success) {
         callToast("스페이스가 생성되었습니다.", "success");
       } else {

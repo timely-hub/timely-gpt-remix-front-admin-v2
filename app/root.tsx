@@ -8,6 +8,7 @@ import {
 } from "@remix-run/react";
 import "~/styles/global.css";
 import "~/styles/layout.css";
+import Toast from "./components/Box/Toast";
 import AdminManagementLayout from "./layouts/Sidebar";
 import ReactQueryClient from "./registry/ReactQueryClient";
 import { figmaTheme } from "./styles/vars.css";
@@ -24,6 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className={figmaTheme}>
+        <Toast />
         <ReactQueryClient>
           {pathname === "/login" ? (
             <div>{children}</div>

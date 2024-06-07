@@ -50,7 +50,7 @@ export default function Dashboard() {
         marginBottom={"16px"}
       >
         <p className={dashboardStyle.title}>대시보드</p>
-        <Buttons>전체 업데이트</Buttons>
+        <Buttons size={"small"}>전체 업데이트</Buttons>
       </Box>
       <Box gap={"8px"} display={"flex"} marginBottom={"32px"}>
         <div className={dashboardStyle.statisticsTab}>
@@ -111,7 +111,7 @@ export default function Dashboard() {
                     </Link>
                   </TD>
                   <TD>{data.description}</TD>
-                  <TD>{data.categoryLabel}</TD>
+                  <TD theme={"yellowFilled"}>{data.categoryLabel}</TD>
                   <TD>{data.viewCount}</TD>
                   <TD>{data.executeCount}</TD>
                   <TD>{dayJsFormatter(data.createdAt)}</TD>
@@ -142,10 +142,10 @@ export default function Dashboard() {
                   <TD>{data.email}</TD>
                   <TD>{data.spaceName}</TD>
                   <TD
-                    spanType={
+                    theme={
                       data?.spaceRoleType === "ROLE_SPACE_OWNER"
-                        ? "roleOwner"
-                        : "roleOther"
+                        ? "primaryFilled"
+                        : "grayScaleFilled"
                     }
                   >
                     {data?.spaceRoleType

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@remix-run/react";
 import clsx from "clsx";
-import Box from "~/components/Box";
+import Box, { Span } from "~/components/Box";
 import { SubMenu } from "./SubMenu";
 import { adminManagementLayoutStyles, adminPageSideStyle } from "./styles.css";
 
@@ -68,7 +68,7 @@ const adminPageMenus = [
       {
         id: 2,
         title: "프롬프트 꾸러미 관리",
-        href: "/store/prompt-package",
+        href: "/store/package",
       },
     ],
   },
@@ -78,17 +78,17 @@ const adminRightSideMenus = [
   {
     id: 0,
     title: "필수 정보 입력",
-    href: "/space/create/required-info",
+    path: "/space/create/required-info",
   },
   {
     id: 1,
     title: "프롬프트 꾸러미 선택",
-    href: "/space/create/prompt-package",
+    path: "/space/create/prompt-package",
   },
   {
     id: 2,
     title: "추천 프롬프트 선택",
-    href: "/space/create/prompt-recommend",
+    path: "/space/create/prompt-recommend",
   },
   {
     id: 3,
@@ -146,22 +146,21 @@ export default function AdminManagementLayout({
               <Box className={adminPageSideStyle.rightSideWrap}>
                 {adminRightSideMenus.map((item) => {
                   return (
-                    <Link
-                      to={item.href || "#"}
+                    <Span
                       className={adminPageSideStyle.rightMenuLink}
                       key={item.id}
                     >
                       <span
                         className={clsx(
                           adminPageSideStyle.submenuTitle,
-                          pathname === item.href
+                          pathname === item.path
                             ? adminPageSideStyle.subMenuSelected
                             : null
                         )}
                       >
                         {item.title}
                       </span>
-                    </Link>
+                    </Span>
                   );
                 })}
               </Box>
