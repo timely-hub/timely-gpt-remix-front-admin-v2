@@ -4,8 +4,8 @@ import Dashboard from "~/components/Dashboard/index";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Timely GPT Admin" },
+    { name: "description", content: "Timely Gpt Admin Page" },
   ];
 };
 
