@@ -15,7 +15,7 @@ export default function LoginLayout({ children }: HeaderLayoutProps) {
           width={"100%"}
           alignItems={"center"}
         >
-          <Box>타임리 관리자 로그인</Box>
+          <Box padding={"0 16px"}>타임리 관리자 로그인</Box>
         </Box>
       </Box>
       <Box className={headerStyles.container}>

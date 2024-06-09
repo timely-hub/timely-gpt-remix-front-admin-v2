@@ -42,7 +42,8 @@ export default function Login() {
           display={"flex"}
           flexDirection={"column"}
           width={"320px"}
-          margin={"0 auto"}
+          margin={"128px auto"}
+          gap={"16px"}
         >
           <Logo />
           <p>관리자 로그인</p>
@@ -55,7 +56,7 @@ export default function Login() {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </LabelBox>
-            <LabelBox label="비밀번호">
+            <LabelBox label="비밀번호" marginBottom={"16px"}>
               <TextInput
                 name="password"
                 type="password"

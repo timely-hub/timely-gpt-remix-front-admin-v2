@@ -1,3 +1,4 @@
+import { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
   Meta,
@@ -8,10 +9,18 @@ import {
 } from "@remix-run/react";
 import "~/styles/global.css";
 import "~/styles/layout.css";
+import { requireUser } from "./.server/session";
 import Toast from "./components/Box/Toast";
 import AdminManagementLayout from "./layouts/Sidebar";
 import ReactQueryClient from "./registry/ReactQueryClient";
 import { figmaTheme } from "./styles/vars.css";
+
+export const loader = async (args: LoaderFunctionArgs) => {
+  const userInfoResponse = await requireUser(args);
+  return {
+    userInfo: userInfoResponse,
+  };
+};
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const pathname = useLocation().pathname;
@@ -30,7 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className={figmaTheme}>
         <Toast />
         <ReactQueryClient>
-          {pathname === "/login" ? (
+          {pathname === "/auth" ? (
             <div>{children}</div>
           ) : (
             <AdminManagementLayout>{children}</AdminManagementLayout>

@@ -138,9 +138,9 @@ const fetcherFunction =
       },
     };
     if (!configs?.disableToken) {
-      const accessToken =
-        fetcherConfigs.accessToken ??
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZjMyMWRiZS1kMTQ3LTRiNGEtYmI1Yi1jNTc4M2JjZDViZTEiLCJybCI6IlJPTEVfQURNSU4iLCJ0IjoiQSIsImlhdCI6MTcxNjc3OTI3NywiZXhwIjoxNzQ4MzE1Mjc3LCJpc3MiOiJ0aW1lbHlncHQifQ.uR51tQpUpSUUu5zDAgShV_WEI5K7OYgCyHTXSTjlaKA";
+      const accessToken = fetcherConfigs.accessToken;
+      // fetcherConfigs.accessToken ??
+      // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZjMyMWRiZS1kMTQ3LTRiNGEtYmI1Yi1jNTc4M2JjZDViZTEiLCJybCI6IlJPTEVfQURNSU4iLCJ0IjoiQSIsImlhdCI6MTcxNjc3OTI3NywiZXhwIjoxNzQ4MzE1Mjc3LCJpc3MiOiJ0aW1lbHlncHQifQ.uR51tQpUpSUUu5zDAgShV_WEI5K7OYgCyHTXSTjlaKA";
       defaultOptions.headers = {
         ...defaultOptions.headers,
         Authorization: `Bearer ${accessToken}`,

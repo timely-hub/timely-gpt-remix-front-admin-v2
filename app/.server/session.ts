@@ -4,7 +4,7 @@ import {
   createCookieSessionStorage,
   redirect,
 } from "@remix-run/node";
-import { UserInfoType } from "~/types/auth";
+import { UserInfoType } from "~/types/shared.types";
 import { loadFetcher } from "~/utils/fetcher";
 
 export const sessionStorage = createCookieSessionStorage({
@@ -30,6 +30,7 @@ export async function getUserToken(
 ): Promise<string | undefined> {
   const session = await getSession(request);
   const accessToken = session.get(USER_SESSION_KEY);
+  console.log(accessToken);
   return accessToken;
 }
 
@@ -38,7 +39,7 @@ export async function getUser(args: LoaderFunctionArgs | ActionFunctionArgs) {
   if (accessToken === undefined) return null;
   const fetcher = await loadFetcher(args);
   const response = await fetcher<UserInfoType>(`/auth/me`);
-  return response?.body ?? null;
+  return response?.data ?? null;
 }
 
 export async function requireAccessToken(
@@ -57,10 +58,12 @@ export async function requireAccessToken(
 export async function requireUser(
   args: LoaderFunctionArgs | ActionFunctionArgs
 ) {
+  const url = new URL(args.request.url).pathname;
+  if (url === "/auth") return null;
   await requireAccessToken(
     args.request,
     new URL(args.request.url).pathname,
-    `/auth`
+    `${args.params.domain ? `/${args.params.domain}` : ""}/auth`
   );
   const user = await getUser(args);
   if (user) return user;
