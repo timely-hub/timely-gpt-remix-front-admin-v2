@@ -13,7 +13,7 @@ import { loader as promptIdsData } from "~/routes/api.get-prompt-info.$id";
 import { loader } from "~/routes/space.create.prompt-package";
 import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
-import { llmModelCategoryTypeLabel } from "~/types/enum.types";
+import { llmModelCategoryTypeLabel } from "~/types/shared.types";
 import { callToast } from "~/zustand/toastSlice";
 import { spaceCreateStyle } from "../styles.css";
 import { promptPackageStyle } from "./styles.css";

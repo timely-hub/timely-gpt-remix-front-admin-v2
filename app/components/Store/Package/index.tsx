@@ -7,17 +7,13 @@ import ModalContainer from "~/components/Box/Modal/Container";
 import { TD, TH, Table } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
 import { statisticsSpaceStyle } from "~/components/Statistics/styles.css";
-import { loader } from "~/routes/store.prompt-package._index";
+import { loader } from "~/routes/store.package._index";
 
 export default function PackageComponent() {
   const navigate = useNavigate();
   const revalidator = useRevalidator();
   const { promptPackageList } = useLoaderData<typeof loader>();
   const [storeData, setStoreData] = useState<PromptPackageListType[]>();
-  const [updateCategory, setUpdateCategory] = useState<number | string>({
-    id: 0,
-    name: "",
-  });
   const [modal, setModal] = useState<boolean>(false);
 
   useEffect(() => {
@@ -49,7 +45,7 @@ export default function PackageComponent() {
         justifyContent={"space-between"}
         marginBottom={"16px"}
       >
-        <p className={statisticsSpaceStyle.title}>스토어 프롬프트 목록</p>
+        <p className={statisticsSpaceStyle.title}>프롬프트 꾸러미 관리</p>
         <Buttons
           size={"small"}
           onClick={async () => {

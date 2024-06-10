@@ -6,7 +6,7 @@ import Buttons from "~/components/Box/Buttons";
 import { spaceInfoStyles } from "~/components/SpaceInfo/styles.css";
 import { statisticsSpaceStyle } from "~/components/Statistics/styles.css";
 import { loader } from "~/routes/user.list.info.$id";
-import { userRoleLabel } from "~/types/enum.types";
+import { userRoleLabel } from "~/types/shared.types";
 import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 

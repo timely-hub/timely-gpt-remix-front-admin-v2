@@ -9,10 +9,10 @@ import Buttons from "~/components/Box/Buttons";
 import Checkbox from "~/components/Box/Checkbox";
 import TextInput from "~/components/Box/TextInput";
 import { spaceCreateStyle } from "~/components/SpaceCreate/styles.css";
-import { loader } from "~/routes/store.prompt-package.edit.$id";
+import { loader } from "~/routes/store.package.edit.$id";
 import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
-import { llmModelCategoryTypeLabel } from "~/types/enum.types";
+import { llmModelCategoryTypeLabel } from "~/types/shared.types";
 import ModalPromptComponent from "./Modal";
 
 export default function PromptPackageEditComponent() {
@@ -56,8 +56,8 @@ export default function PromptPackageEditComponent() {
       {modal && (
         <ModalPromptComponent
           onClose={closeModal}
-          id={id}
-          label={label}
+          id={id || "0"}
+          label={label || ""}
           existPromptIdList={existIds}
         />
       )}

@@ -8,8 +8,11 @@ import Checkbox from "~/components/Box/Checkbox";
 import useBulkState from "~/hooks/useBulkState";
 import { promptBoxStyle } from "~/styles/share.css";
 import { ApiResponseType } from "~/types/api";
-import { llmModelCategoryTypeLabel } from "~/types/enum.types";
-import { SpaceMainType, defaultSpaceMainType } from "~/types/shared.types";
+import {
+  SpaceMainType,
+  defaultSpaceMainType,
+  llmModelCategoryTypeLabel,
+} from "~/types/shared.types";
 import { callToast } from "~/zustand/toastSlice";
 import { spaceCreateStyle } from "../styles.css";
 

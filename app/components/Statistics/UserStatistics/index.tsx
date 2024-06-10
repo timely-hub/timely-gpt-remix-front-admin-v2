@@ -18,7 +18,7 @@ import TextInput from "~/components/Box/TextInput";
 import { loader } from "~/routes/statistics.user.$id";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
-import { spaceRoleLabel } from "~/types/enum.types";
+import { spaceRoleLabel } from "~/types/shared.types";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 

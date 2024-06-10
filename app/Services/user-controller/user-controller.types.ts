@@ -1,4 +1,4 @@
-import { UserRoleType } from "~/types/enum.types";
+import { UserRoleType } from "~/types/shared.types";
 
 export type UserDetailType = {
   id: string;

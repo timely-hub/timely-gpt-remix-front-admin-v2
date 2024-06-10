@@ -1,4 +1,4 @@
-import { ActionFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, json } from "@remix-run/node";
 import { loadFetcher } from "~/utils/fetcher";
 
 export const deletePromptById = async (args: ActionFunctionArgs) => {
@@ -7,7 +7,9 @@ export const deletePromptById = async (args: ActionFunctionArgs) => {
     id: number | string;
   };
   const fetcher = await loadFetcher(args, "delete");
-  return await fetcher(`/prompt/${id}`, {
+  const response = await fetcher(`/prompt/${id}`, {
     body: JSON.stringify({ id }),
+    method: "DELETE",
   });
+  return json(response);
 };

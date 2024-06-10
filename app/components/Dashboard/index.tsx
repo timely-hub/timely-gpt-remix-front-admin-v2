@@ -2,7 +2,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import Buttons from "~/components/Box/Buttons";
 import { loader } from "~/routes/_index";
-import { spaceRoleLabel } from "~/types/enum.types";
+import { spaceRoleLabel } from "~/types/shared.types";
 import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
 import Box from "../Box";
@@ -27,18 +27,18 @@ export default function Dashboard() {
     useState<PromptType[]>();
   useEffect(() => {
     if (!response) return;
-    if (response.data) {
+    if (response) {
       setTotalData({
-        totalMemberCount: response.data.totalMemberCount,
-        totalSpaceCount: response.data.totalSpaceCount,
-        totalPromptCount: response.data.totalPromptCount,
-        todayTotalCreditUsed: response.data.todayTotalCreditUsed,
-        thisMonthTotalCreditUsed: response.data.thisMonthTotalCreditUsed,
+        totalMemberCount: response.totalMemberCount,
+        totalSpaceCount: response.totalSpaceCount,
+        totalPromptCount: response.totalPromptCount,
+        todayTotalCreditUsed: response.todayTotalCreditUsed,
+        thisMonthTotalCreditUsed: response.thisMonthTotalCreditUsed,
       });
-      setBestPromptData(response.data.bestPromptList);
-      setRecentJoinMemberData(response.data.recentJoinMemberList);
-      setRecentCreateSpaceData(response.data.recentCreatedSpaceList);
-      setRecentCreatePromptData(response.data.recentCreatedPromptList);
+      setBestPromptData(response.bestPromptList);
+      setRecentJoinMemberData(response.recentJoinMemberList);
+      setRecentCreateSpaceData(response.recentCreatedSpaceList);
+      setRecentCreatePromptData(response.recentCreatedPromptList);
     }
   }, [response]);
   return (

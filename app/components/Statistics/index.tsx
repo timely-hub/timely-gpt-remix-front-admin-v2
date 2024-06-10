@@ -217,7 +217,9 @@ export default function Statistics() {
                     borderRadius={"4px"}
                     onClick={() => {
                       if (pathname === "/space/list") {
-                        navigate(`/space/list/info/${item?.id}`);
+                        navigate(
+                          `/space/list/info/${item?.id}?member=${item.memberCount}&prompt=${item.promptCount}`
+                        );
                       } else {
                         if (pathname === "/statistics/space") {
                           navigate(`/statistics/space/${item?.id}`);

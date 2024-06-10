@@ -11,7 +11,7 @@ import Search from "~/assets/icons/Search.svg?react";
 import Sorting from "~/assets/icons/Sorting.svg?react";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
-import { spaceRoleLabel } from "~/types/enum.types";
+import { spaceRoleLabel } from "~/types/shared.types";
 import { dayJsFormatter } from "~/utils/formatter";
 import {
   objectToQueryParams,

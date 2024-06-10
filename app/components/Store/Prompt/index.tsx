@@ -224,7 +224,9 @@ export default function PromptManagementComponent() {
                     borderRadius={"4px"}
                     onClick={async () => {
                       const response = await deletePrompt(item.id);
-                      if (response.success) {
+                      if (!response.success) {
+                        callToast(response.message, "error");
+                      } else {
                         refetch();
                         setLoading(true);
                         callToast(

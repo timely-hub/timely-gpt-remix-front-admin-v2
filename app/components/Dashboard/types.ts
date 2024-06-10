@@ -1,4 +1,4 @@
-import { SpaceRoleType } from "~/types/enum.types";
+import { SpaceRoleType } from "~/types/shared.types";
 
 export type TotalCountProps = {
   totalMemberCount: number;

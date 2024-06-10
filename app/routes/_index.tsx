@@ -11,7 +11,7 @@ export const meta: MetaFunction = () => {
 
 export const loader = async (args: LoaderFunctionArgs) => {
   const response = await getDashboard(args);
-  return response;
+  return response?.data;
 };
 
 export default function AdminIndex() {

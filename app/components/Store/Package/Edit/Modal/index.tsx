@@ -21,14 +21,14 @@ import TextInput from "~/components/Box/TextInput";
 import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
-import { llmModelCategoryTypeLabel } from "~/types/enum.types";
+import { llmModelCategoryTypeLabel } from "~/types/shared.types";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { callToast } from "~/zustand/toastSlice";
 import { buttonLoadingStyle } from "../styles.css";
 
 interface ModalPromptProps {
-  id: string;
-  label: string;
+  id?: string;
+  label?: string;
   existPromptIdList: number[];
   onClose: () => void;
 }

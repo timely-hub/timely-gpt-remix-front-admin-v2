@@ -4,9 +4,14 @@ import { loadFetcher } from "~/utils/fetcher";
 export const updateCategory =
   (args: ActionFunctionArgs) => async (id: string | number) => {
     const clonedRequest = args.request.clone();
-    const categoryData = await clonedRequest.json();
-    const fetcher = await loadFetcher(args, "put");
-    const response = await fetcher<string>(`/category/${id}`, {
+    let categoryData = await clonedRequest.json();
+
+    const url = id === "0" ? "/category" : `/category/${id}`;
+    if (id === "0") {
+      categoryData = { ...categoryData, displayOrder: 1 };
+    }
+    const fetcher = await loadFetcher(args, categoryData.method.toLowerCase());
+    const response = await fetcher<string>(url, {
       method: categoryData.method,
       body: JSON.stringify(categoryData),
     });
