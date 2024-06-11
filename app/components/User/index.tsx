@@ -133,6 +133,7 @@ export default function UserListComponent() {
       >
         <p className={statisticsSpaceStyle.title}>전체 유저 목록</p>
         <Buttons
+          size={"small"}
           onClick={() => {
             refetch();
             setLoading(true);

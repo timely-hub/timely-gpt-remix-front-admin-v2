@@ -125,7 +125,7 @@ export default function SpaceCreate() {
           <CalendarInput
             value={state.expiredAt}
             onChange={(date) => {
-              setState("expiredAt", date.isoDate);
+              setState("expiredAt", date.formatted);
             }}
           ></CalendarInput>
         </Box>

@@ -15,7 +15,7 @@ const calendarStyle = {
     alignItems: "center",
     justifyContent: "space-between",
     padding: "9px 16px",
-    backgroundColor: vars.colors["Grayscale/Gray 300"],
+    backgroundColor: vars.colors["Grayscale/White"],
   }),
   headerCenter: style({
     display: "flex",

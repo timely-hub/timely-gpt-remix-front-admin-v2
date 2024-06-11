@@ -27,8 +27,8 @@ import { callToast } from "~/zustand/toastSlice";
 import { buttonLoadingStyle } from "../styles.css";
 
 interface ModalPromptProps {
-  id?: string;
-  label?: string;
+  id: string;
+  label: string;
   existPromptIdList: number[];
   onClose: () => void;
 }
