@@ -1,17 +1,17 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import {
+  DefaultTableListCursorQueryParamsType,
+  defaultTableListCursorQueryDefault,
+} from "~/types/shared.types";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import {
-  MemberSearchType,
-  SpaceMemberSearchQueryParamsType,
-  spaceMemberSearchQueryDefault,
-} from "./space-controller.types";
+import { MemberSearchType } from "./space-controller.types";
 
 export const getMemberLiveSearch =
   (args: LoaderFunctionArgs) =>
-  async (queryParams: SpaceMemberSearchQueryParamsType) => {
+  async (queryParams: DefaultTableListCursorQueryParamsType) => {
     queryParams = omitUnusedSearchParams(
-      spaceMemberSearchQueryDefault,
+      defaultTableListCursorQueryDefault,
       queryParams
     );
     const parsed = objectToQueryParams({ ...queryParams });

@@ -5,11 +5,9 @@ import {
   getSpaceStatsNewPromptById,
   getSpaceStatsTokenUsage,
 } from "~/Services/space-statistics-controller/get-space-statistics-by-id.server";
-import {
-  spaceStatisticsListQueryDefault,
-  spaceStatisticsTokenUsageQueryDefault,
-} from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { spaceStatisticsTokenUsageQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import SpaceStatistics from "~/components/Statistics/SpaceStatistics";
+import { defaultTableListCursorQueryDefault } from "~/types/shared.types";
 import { getQueryParams } from "~/utils/helpers";
 
 export const loader = async (args: LoaderFunctionArgs) => {
@@ -18,7 +16,7 @@ export const loader = async (args: LoaderFunctionArgs) => {
   const spaceDomain = await getSpaceDomain(args)(id || "");
   const currentParams = getQueryParams(
     searchParams,
-    spaceStatisticsListQueryDefault
+    defaultTableListCursorQueryDefault
   );
   const statsRecentMember = await getSpaceStatsNewMemberById(args)(
     id || "",

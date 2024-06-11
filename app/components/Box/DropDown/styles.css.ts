@@ -1,4 +1,3 @@
-import { globalStyle } from "@vanilla-extract/css";
 import {
   getBgColor,
   getBorder,
@@ -7,18 +6,18 @@ import {
   getShadow,
   getTextStyles,
 } from "~/styles/helpers";
-import { appStyles } from "~/styles/layer.css";
+import { appStyles, globalAppStyle } from "~/styles/layer.css";
 import { vars } from "~/styles/vars.css";
 
-const dropdownStyle = appStyles({
+const selectorStyles = appStyles({
   wrap: {
-    display: "inline-block",
     position: "relative",
     appearance: "button",
     width: "inherit",
+    ...getBgColor("Grayscale/White"),
   },
   labelWrap: {
-    width: "inherit",
+    width: "100%",
     ...getInsetBorder(1, "Grayscale/Gray 100"),
     display: "inline-flex",
     alignItems: "center",
@@ -44,6 +43,7 @@ const dropdownStyle = appStyles({
     flexShrink: 0,
     overflow: "hidden",
     textOverflow: "ellipsis",
+    width: "100%",
     whiteSpace: "nowrap",
     ...getTextStyles("Grayscale/Black", "Body/14px/14px.400"),
   },
@@ -71,6 +71,9 @@ const dropdownStyle = appStyles({
       outline: "none",
       ...getBorder(1, "Primary/Primary 500", 8),
     },
+    ":active:focus": {
+      border: "none",
+    },
   },
   item: {
     cursor: "pointer",
@@ -88,68 +91,90 @@ const dropdownStyle = appStyles({
       ...getBgColor("Grayscale/Gray 50"),
     },
     ":first-of-type": {
-      borderRadius: "8px 8px 0 0",
+      borderTopLeftRadius: "8px",
+      borderTopRightRadius: "8px",
     },
-    ":last-of-type": { borderBottom: "none", borderRadius: "0 0 8px 8px" },
+    ":last-of-type": {
+      borderBottom: "none",
+      borderBottomLeftRadius: "8px",
+      borderBottomRightRadius: "8px",
+    },
     ":focus": {
       outline: "none",
       ...getInsetBorder(1, "Primary/Primary 500"),
     },
+    ":active": {
+      outline: "none",
+      border: "none",
+      boxShadow: "none",
+    },
+  },
+  active: {
+    ...getFontColor("Primary/Primary 500"),
+  },
+  big: {
+    padding: "14px 16px",
   },
 });
 
-globalStyle(`${dropdownStyle.labelWrap} svg`, {
+globalAppStyle(`${selectorStyles.labelWrap} svg`, {
   flexShrink: 0,
 });
 
-globalStyle(`${dropdownStyle.labelWrap}:disabled ${dropdownStyle.label}`, {
+globalAppStyle(`${selectorStyles.labelWrap}:disabled ${selectorStyles.label}`, {
   ...getFontColor("Grayscale/Gray 300"),
 });
 
-globalStyle(`${dropdownStyle.labelWrap} svg`, {
+globalAppStyle(`${selectorStyles.labelWrap} svg`, {
   transition: "transform 0.3s",
 });
-globalStyle(`${dropdownStyle.labelWrap} svg.reverse`, {
+globalAppStyle(`${selectorStyles.labelWrap} svg.reverse`, {
   transform: "rotate(-180deg)",
 });
 
-globalStyle(`${dropdownStyle.dropdown}.open`, {
+globalAppStyle(`${selectorStyles.dropdown}.open`, {
   visibility: "visible",
   opacity: 1,
   transform: "translateY(0)",
 });
-globalStyle(`${dropdownStyle.item}.active:not(:hover)`, {
+globalAppStyle(`${selectorStyles.item}.${selectorStyles.active}:not(:hover)`, {
   ...getFontColor("Primary/Primary 500"),
 });
 
 /**
  * 실제 아이콘의 data-fill, data-stroke 속성을 이용하여 색상을 변경하는 경우에만 사용.
  */
-globalStyle(`${dropdownStyle.item}.active:not(:hover) path:[data-fill]`, {
-  fill: vars.colors["Primary/Primary 500"],
-});
-globalStyle(`${dropdownStyle.item}.active:not(:hover) path:[data-stroke]`, {
-  stroke: vars.colors["Primary/Primary 500"],
-});
-/**
- * 아래는 일반적인 경우에만 적용되어서, 변동의 여지가 있음.
- */
-globalStyle(
-  `${dropdownStyle.item}.active:not(:hover) path:not([clip-rule])[fill]`,
+globalAppStyle(
+  `${selectorStyles.item}.${selectorStyles.active}:not(:hover) path[data-fill]`,
   {
     fill: vars.colors["Primary/Primary 500"],
   }
 );
-globalStyle(
-  `${dropdownStyle.item}.active:not(:hover) path:not([stroke])[fill-rule][clip-rule]`,
-  {
-    fill: vars.colors["Primary/Primary 500"],
-  }
-);
-globalStyle(
-  `${dropdownStyle.item}.active:not(:hover) path:not([clip-rule])[stroke]`,
+globalAppStyle(
+  `${selectorStyles.item}.${selectorStyles.active}:not(:hover) path[data-stroke]`,
   {
     stroke: vars.colors["Primary/Primary 500"],
   }
 );
-export default dropdownStyle;
+/**
+ * 아래는 일반적인 경우에만 적용되어서, 변동의 여지가 있음.
+ */
+globalAppStyle(
+  `${selectorStyles.item}.${selectorStyles.active}:not(:hover) path:not([clip-rule])[fill]`,
+  {
+    fill: vars.colors["Primary/Primary 500"],
+  }
+);
+globalAppStyle(
+  `${selectorStyles.item}.${selectorStyles.active}:not(:hover) path:not([stroke])[fill-rule][clip-rule]`,
+  {
+    fill: vars.colors["Primary/Primary 500"],
+  }
+);
+globalAppStyle(
+  `${selectorStyles.item}.active:not(:hover) path:not([clip-rule])[stroke]`,
+  {
+    stroke: vars.colors["Primary/Primary 500"],
+  }
+);
+export default selectorStyles;

@@ -2,11 +2,7 @@ import { Form } from "@remix-run/react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
-import {
-  StorePromptListQueryParamsType,
-  StorePromptListType,
-  storePromptListQueryDefault,
-} from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { StorePromptListType } from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import Search from "~/assets/icons/Search.svg?react";
 import Sorting from "~/assets/icons/Sorting.svg?react";
 import Box from "~/components/Box";
@@ -17,6 +13,10 @@ import TextInput from "~/components/Box/TextInput";
 import { statisticsSpaceStyle } from "~/components/Statistics/styles.css";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
+import {
+  DefaultTableListCursorQueryParamsType,
+  defaultTableListCursorQueryDefault,
+} from "~/types/shared.types";
 import { dayJsFormatter } from "~/utils/formatter";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { callToast } from "~/zustand/toastSlice";
@@ -40,10 +40,10 @@ type QueryParamsType = {
 };
 
 const getStorePromptList = async (
-  queryParams: StorePromptListQueryParamsType
+  queryParams: DefaultTableListCursorQueryParamsType
 ) => {
   queryParams = omitUnusedSearchParams(
-    storePromptListQueryDefault,
+    defaultTableListCursorQueryDefault,
     queryParams
   );
   const parsed = objectToQueryParams({ ...queryParams });

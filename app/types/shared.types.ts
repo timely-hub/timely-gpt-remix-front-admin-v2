@@ -77,6 +77,19 @@ export const defaultSpaceMainType: SpaceMainType = {
   spaceDashboardList: [],
 };
 
+export const defaultTableListCursorQueryDefault = {
+  keyword: "",
+  cursor: "",
+  take: "10",
+  order: "asc",
+  basis: "",
+  categoryId: "",
+};
+
+export type DefaultTableListCursorQueryParamsType = Partial<
+  typeof defaultTableListCursorQueryDefault
+>;
+
 export const modelCategoryTypeLabel = {
   PROMPT: "대화형",
   IMAGE: "이미지 생성",

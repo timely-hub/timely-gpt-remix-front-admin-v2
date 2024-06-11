@@ -89,26 +89,6 @@ export interface SpaceStatisticsTokenUsageType {
   usableCredit: number;
 }
 
-export const spaceListCursorQueryDefault = {
-  keyword: "",
-  cursor: "",
-  take: "10",
-  order: "asc",
-  basis: "",
-};
-
-export type StatisticsListCursorQueryParamsType = Partial<
-  typeof spaceListCursorQueryDefault
->;
-
-export const spaceStatisticsListQueryDefault = {
-  take: "10",
-};
-
-export type SpaceStatisticsQueryParamsType = Partial<
-  typeof spaceStatisticsListQueryDefault
->;
-
 export const spaceStatisticsTokenUsageQueryDefault = {
   year: "2024",
   month: "1",
@@ -116,19 +96,6 @@ export const spaceStatisticsTokenUsageQueryDefault = {
 
 export type SpaceStatisticsTokenUsageQueryParamsType = Partial<
   typeof spaceStatisticsTokenUsageQueryDefault
->;
-
-export const storePromptListQueryDefault = {
-  cursor: "",
-  take: "10",
-  order: "asc",
-  basis: "",
-  name: "",
-  categoryId: "",
-};
-
-export type StorePromptListQueryParamsType = Partial<
-  typeof storePromptListQueryDefault
 >;
 
 export type StorePromptListType = {

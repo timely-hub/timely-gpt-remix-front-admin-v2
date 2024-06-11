@@ -1,18 +1,18 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { CursorResponse } from "~/types/api";
+import {
+  DefaultTableListCursorQueryParamsType,
+  defaultTableListCursorQueryDefault,
+} from "~/types/shared.types";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import {
-  StorePromptListQueryParamsType,
-  StorePromptListType,
-  spaceListCursorQueryDefault,
-} from "../space-statistics-controller/space-statistics-controller.types";
+import { StorePromptListType } from "../space-statistics-controller/space-statistics-controller.types";
 
 export const getStorePromptList =
   (args: LoaderFunctionArgs) =>
-  async (queryParams: StorePromptListQueryParamsType) => {
+  async (queryParams: DefaultTableListCursorQueryParamsType) => {
     queryParams = omitUnusedSearchParams(
-      spaceListCursorQueryDefault,
+      defaultTableListCursorQueryDefault,
       queryParams
     );
     const parsed = objectToQueryParams({ ...queryParams });

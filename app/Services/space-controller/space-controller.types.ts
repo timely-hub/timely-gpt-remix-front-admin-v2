@@ -33,11 +33,3 @@ export interface PromptMemberType {
 export type MemberSearchType = {
   email: string;
 };
-
-export const spaceMemberSearchQueryDefault = {
-  keyword: "",
-};
-
-export type SpaceMemberSearchQueryParamsType = Partial<
-  typeof spaceMemberSearchQueryDefault
->;

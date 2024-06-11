@@ -1,18 +1,18 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { CursorResponse } from "~/types/api";
+import {
+  DefaultTableListCursorQueryParamsType,
+  defaultTableListCursorQueryDefault,
+} from "~/types/shared.types";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
-import {
-  StatisticsListCursorQueryParamsType,
-  UserListCursorType,
-  spaceListCursorQueryDefault,
-} from "../space-statistics-controller/space-statistics-controller.types";
+import { UserListCursorType } from "../space-statistics-controller/space-statistics-controller.types";
 
 export const getUserList =
   (args: LoaderFunctionArgs) =>
-  async (queryParams: StatisticsListCursorQueryParamsType) => {
+  async (queryParams: DefaultTableListCursorQueryParamsType) => {
     queryParams = omitUnusedSearchParams(
-      spaceListCursorQueryDefault,
+      defaultTableListCursorQueryDefault,
       queryParams
     );
     const parsed = objectToQueryParams({ ...queryParams });

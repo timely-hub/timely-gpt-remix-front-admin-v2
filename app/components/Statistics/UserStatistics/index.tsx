@@ -3,11 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
 import { SpaceInfoType } from "~/Services/space-controller/get-space-domain-by-id.server";
-import {
-  SpaceStatisticsMemberListCursorType,
-  StatisticsListCursorQueryParamsType,
-  spaceListCursorQueryDefault,
-} from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { SpaceStatisticsMemberListCursorType } from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import Search from "~/assets/icons/Search.svg?react";
 import Sorting from "~/assets/icons/Sorting.svg?react";
 import Box, { Div, Flex } from "~/components/Box";
@@ -18,7 +14,11 @@ import TextInput from "~/components/Box/TextInput";
 import { loader } from "~/routes/statistics.user.$id";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
-import { spaceRoleLabel } from "~/types/shared.types";
+import {
+  DefaultTableListCursorQueryParamsType,
+  defaultTableListCursorQueryDefault,
+  spaceRoleLabel,
+} from "~/types/shared.types";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { statisticsSpaceStyle } from "../styles.css";
 
@@ -39,10 +39,10 @@ type QueryParamsType = {
 
 const getUserList = async (
   id: string,
-  queryParams: StatisticsListCursorQueryParamsType
+  queryParams: DefaultTableListCursorQueryParamsType
 ) => {
   queryParams = omitUnusedSearchParams(
-    spaceListCursorQueryDefault,
+    defaultTableListCursorQueryDefault,
     queryParams
   );
   const parsed = objectToQueryParams({ ...queryParams });

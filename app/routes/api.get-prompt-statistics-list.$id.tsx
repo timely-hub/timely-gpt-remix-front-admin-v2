@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { getPromptStatisticsList } from "~/Services/space-statistics-controller/get-prompt-statistics-by-id.server";
-import { spaceListCursorQueryDefault } from "~/Services/space-statistics-controller/space-statistics-controller.types";
+import { defaultTableListCursorQueryDefault } from "~/types/shared.types";
 import { getQueryParams } from "~/utils/helpers";
 
 export const loader = async (args: LoaderFunctionArgs) => {
@@ -8,7 +8,7 @@ export const loader = async (args: LoaderFunctionArgs) => {
   const { id } = args.params;
   const currentParams = getQueryParams(
     searchParams,
-    spaceListCursorQueryDefault
+    defaultTableListCursorQueryDefault
   );
   const response = await getPromptStatisticsList(args)(id || "", currentParams);
   return json(response);

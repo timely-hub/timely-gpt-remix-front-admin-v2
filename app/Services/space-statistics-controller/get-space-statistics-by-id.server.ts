@@ -1,21 +1,23 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import {
+  DefaultTableListCursorQueryParamsType,
+  defaultTableListCursorQueryDefault,
+} from "~/types/shared.types";
 import { loadFetcher } from "~/utils/fetcher";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import {
   SpaceStatisticsMemberListCursorType,
   SpaceStatisticsPromptListCursorType,
-  SpaceStatisticsQueryParamsType,
   SpaceStatisticsTokenUsageQueryParamsType,
   SpaceStatisticsTokenUsageType,
-  spaceStatisticsListQueryDefault,
   spaceStatisticsTokenUsageQueryDefault,
 } from "./space-statistics-controller.types";
 
 export const getSpaceStatsNewMemberById =
   (args: LoaderFunctionArgs) =>
-  async (id: string, queryParams: SpaceStatisticsQueryParamsType) => {
+  async (id: string, queryParams: DefaultTableListCursorQueryParamsType) => {
     queryParams = omitUnusedSearchParams(
-      spaceStatisticsListQueryDefault,
+      defaultTableListCursorQueryDefault,
       queryParams
     );
     const parsed = objectToQueryParams({ ...queryParams });
@@ -31,9 +33,9 @@ export const getSpaceStatsNewMemberById =
 
 export const getSpaceStatsNewPromptById =
   (args: LoaderFunctionArgs) =>
-  async (id: string, queryParams: SpaceStatisticsQueryParamsType) => {
+  async (id: string, queryParams: DefaultTableListCursorQueryParamsType) => {
     queryParams = omitUnusedSearchParams(
-      spaceStatisticsListQueryDefault,
+      defaultTableListCursorQueryDefault,
       queryParams
     );
     const parsed = objectToQueryParams({ ...queryParams });

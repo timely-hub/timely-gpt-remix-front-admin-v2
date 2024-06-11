@@ -1,5 +1,11 @@
 import { Link, useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import {
+  PromptType,
+  SpaceType,
+  StatisticsMemberType,
+  TotalCountProps,
+} from "~/Services/dashboard-controller/dashboard-controller.types";
 import Buttons from "~/components/Box/Buttons";
 import { loader } from "~/routes/_index";
 import { spaceRoleLabel } from "~/types/shared.types";
@@ -8,12 +14,6 @@ import { thousand } from "~/utils/helpers";
 import Box from "../Box";
 import { TD, TH, Table } from "../Box/Table";
 import { dashboardStyle } from "./styles.css";
-import {
-  PromptType,
-  SpaceType,
-  StatisticsMemberType,
-  TotalCountProps,
-} from "./types";
 
 export default function Dashboard() {
   const response = useLoaderData<typeof loader>();

@@ -4,10 +4,6 @@ import clsx from "clsx";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { BiLoaderAlt } from "react-icons/bi";
 import { VirtuosoGrid } from "react-virtuoso";
-import {
-  StorePromptListQueryParamsType,
-  storePromptListQueryDefault,
-} from "~/Services/space-statistics-controller/space-statistics-controller.types";
 import { PackagePromptListCursorType } from "~/Services/store-controller/store-controller.types";
 import Download from "~/assets/icons/Download.svg?react";
 import OutlineEye from "~/assets/icons/OutlineEye.svg?react";
@@ -21,7 +17,11 @@ import TextInput from "~/components/Box/TextInput";
 import { promptBoxStyle } from "~/styles/share.css";
 import { vars } from "~/styles/vars.css";
 import { ApiResponseType, CursorResponse } from "~/types/api";
-import { llmModelCategoryTypeLabel } from "~/types/shared.types";
+import {
+  DefaultTableListCursorQueryParamsType,
+  defaultTableListCursorQueryDefault,
+  llmModelCategoryTypeLabel,
+} from "~/types/shared.types";
 import { objectToQueryParams, omitUnusedSearchParams } from "~/utils/helpers";
 import { callToast } from "~/zustand/toastSlice";
 import { buttonLoadingStyle } from "../styles.css";
@@ -47,10 +47,10 @@ type PromptPackageParamsType = {
 };
 
 const getMyPackagePromptModalList = async (
-  queryParams: StorePromptListQueryParamsType
+  queryParams: DefaultTableListCursorQueryParamsType
 ) => {
   queryParams = omitUnusedSearchParams(
-    storePromptListQueryDefault,
+    defaultTableListCursorQueryDefault,
     queryParams
   );
   const parsed = objectToQueryParams({ ...queryParams });
