@@ -1,0 +1,65 @@
+name: Stg
+
+on:
+  push:
+    branches:
+      - stg
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to ACR
+        run: |
+          echo ${{ secrets.ACR_PASSWORD }} | docker login ${{ secrets.ACR_LOGIN_SERVER }} --username ${{ secrets.ACR_USERNAME }} --password-stdin
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.ACR_LOGIN_SERVER }}/timely-gpt-remix-front-admin-v2:${{ github.sha }}
+
+  trigger_infra:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger infra repository workflow
+        id: trigger_infra
+        run: |
+          curl -X POST -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" \
+          https://api.github.com/repos/timely-hub/timely-infra/dispatches \
+          -d '{"event_type":"update_backend", "client_payload": {"tag": "${{ github.sha }}"}}'
+
+  wait_for_infra:
+    needs: trigger_infra
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for infra repository workflow to finish
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { data: runs } = await github.actions.listWorkflowRunsForRepo({
+              owner: 'timely-hub',
+              repo: 'timely-infra',
+              event: 'update_front_admin',
+              status: 'completed',
+              per_page: 1,
+            });
+            const run = runs.workflow_runs[0];
+            if (run.conclusion !== 'success') {
+              core.setFailed(`Infra workflow failed with conclusion: ${run.conclusion}`);
+            }
