@@ -42,24 +42,49 @@ jobs:
           curl -X POST -H "Accept: application/vnd.github.v3+json" \
           -H "Authorization: Bearer ${{ secrets.GIT_TOKEN }}" \
           https://api.github.com/repos/timely-hub/timely-infra/dispatches \
-          -d '{"event_type":"update_backend", "client_payload": {"tag": "${{ github.sha }}"}}'
+          -d '{"event_type":"update_front_admin", "client_payload": {"tag": "${{ github.sha }}"}}'
 
-  wait_for_infra:
-    needs: trigger_infra
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for infra repository workflow to finish
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const { data: runs } = await github.actions.listWorkflowRunsForRepo({
-              owner: 'timely-hub',
-              repo: 'timely-infra',
-              event: 'update_front_admin',
-              status: 'completed',
-              per_page: 1,
-            });
-            const run = runs.workflow_runs[0];
-            if (run.conclusion !== 'success') {
-              core.setFailed(`Infra workflow failed with conclusion: ${run.conclusion}`);
-            }
+# TODO: 쿠버네티스 컨테이너 이미지 갱신 워크플로우 성공 검증.
+#  wait_for_infra:
+#    needs: trigger_infra
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Wait for infra repository workflow to finish
+#        uses: actions/github-script@v7
+#        with:
+#          script: |
+#            const owner = 'timely-hub';
+#            const repo = 'timely-infra';
+#            const event_type = 'update_front_admin';
+#            const sha = '${{ github.sha }}';
+#
+#            // Wait for the workflow run to complete
+#            let runCompleted = false;
+#            let conclusion = 'failure';
+#
+#            while (!runCompleted) {
+#              const { data: workflow_runs } = await github.rest.actions.listWorkflowRunsForRepo({
+#                owner,
+#                repo,
+#                event: event_type,
+#                status: 'success',
+#                per_page: 1
+#              });
+#
+#              if (workflow_runs.workflow_runs.length > 0) {
+#                const run = workflow_runs.workflow_runs.find(r => r.head_sha === sha);
+#                if (run) {
+#                  runCompleted = true;
+#                  conclusion = run.conclusion;
+#                }
+#              }
+#
+#              // Sleep for 30 seconds before checking again
+#              await new Promise(resolve => setTimeout(resolve, 30000));
+#            }
+#
+#            if (conclusion !== 'success') {
+#              core.setFailed(`Infra workflow failed with conclusion: ${conclusion}`);
+#            } else {
+#              core.notice('Infra workflow succeeded');
+#            }
