@@ -1,4 +1,4 @@
-name: Stg
+name: "[stg] docker image build and push"
 
 on:
   push:
