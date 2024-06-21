@@ -2,8 +2,12 @@
 FROM node:20 AS builder
 # Set working directory
 WORKDIR /usr/src/app
-# Copy package.json and pnpm-lock.yaml
+# define args
+ARG NODE_ENV=production
+ARG ENV_FILE=.env.${NODE_ENV}
+# Copy package.json and pnpm-lock.yaml, .env
 COPY package.json pnpm-lock.yaml ./
+RUN cp $ENV_FILE ./.env
 # Install pnpm
 RUN npm install -g pnpm
 # Install dependencies
@@ -11,7 +15,7 @@ RUN pnpm install
 # Copy the rest of the application files
 COPY . .
 # Build the application
-RUN pnpm run build
+RUN if [ "$BUILD_ENV" = "staging" ]; then pnpm run build:staging; else pnpm run build; fi
 
 
 # Step 2: Run the application

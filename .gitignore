@@ -45,6 +45,6 @@ svg/*.svg
 
 .idea
 
-.env
+#.env
 
 vite.config.ts.*.mjs
