@@ -21,6 +21,7 @@ export const action = async (args: ActionFunctionArgs) => {
   const res = await fetcher<{ accessToken: string }>("/auth/sign-in", {
     body: JSON.stringify({ email, password }),
   });
+
   if (res.success) {
     return await createTokenSession({
       request: args.request,

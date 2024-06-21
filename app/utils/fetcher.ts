@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { getUserToken } from "~/.server/session";
+import { getAccessToken } from "~/.server/session";
 import { ApiResponseType } from "~/types/api";
 
 type FetcherOptions = {
@@ -218,7 +218,7 @@ export const loadFetcher = async (
   method?: keyof typeof fetcher
 ) => {
   const spaceDomain = args.params.spaceDomain;
-  const accessToken = await getUserToken(args.request);
+  const accessToken = await getAccessToken(args.request);
   const pathname = new URL(args.request.url).pathname;
   return fetcher[method ?? "get"]({ accessToken, pathname, spaceDomain });
 };
