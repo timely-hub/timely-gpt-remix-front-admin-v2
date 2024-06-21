@@ -32,7 +32,7 @@ jobs:
           push: true
           tags: ${{ secrets.ACR_LOGIN_SERVER }}/timely-gpt-remix-front-admin-v2:${{ github.sha }}
           build-args: |
-            BUILD_ENV=staging
+            NODE_ENV=staging
 
   trigger_infra:
     needs: build
