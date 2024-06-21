@@ -15,7 +15,7 @@ RUN pnpm install
 # Copy the rest of the application files
 COPY . .
 # Build the application
-RUN if [ "$BUILD_ENV" = "staging" ]; then pnpm run build:staging; else pnpm run build; fi
+RUN if [ "$NODE_ENV" = "staging" ]; then pnpm run build:staging; else pnpm run build; fi
 
 
 # Step 2: Run the application
