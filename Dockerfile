@@ -5,17 +5,18 @@ WORKDIR /usr/src/app
 # define args
 ARG NODE_ENV=production
 ARG ENV_FILE=.env.${NODE_ENV}
-# Copy package.json and pnpm-lock.yaml, .env
+# Copy package.json and pnpm-lock.yaml
 COPY package.json pnpm-lock.yaml ./
-RUN cp $ENV_FILE ./.env
 # Install pnpm
 RUN npm install -g pnpm
 # Install dependencies
 RUN pnpm install
 # Copy the rest of the application files
 COPY . .
+# Verify the environment file exists
+RUN if [ -f "${ENV_FILE}" ]; then echo "${ENV_FILE} found"; else echo "${ENV_FILE} not found"; exit 1; fi
 # Build the application
-RUN if [ "$NODE_ENV" = "staging" ]; then pnpm run build:staging; else pnpm run build; fi
+RUN if [ "${NODE_ENV}" = "staging" ]; then pnpm run build:staging; else pnpm run build; fi
 
 
 # Step 2: Run the application
