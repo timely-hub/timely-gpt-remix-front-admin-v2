@@ -33,4 +33,8 @@ export const dashboardStyle = appStyles({
     ...getTextStyles("Grayscale/Black", "Title/24px/24px.700"),
     marginBottom: "16px",
   },
+  chartLabel: {
+    ...getTextStyles("Grayscale/Gray 500", "Body/12px/12px.400"),
+    marginBottom: "16px",
+  },
 });

@@ -7,17 +7,18 @@ import ModalContainer from "~/components/Box/Modal/Container";
 import { TD, TH, Table } from "~/components/Box/Table";
 import TextInput from "~/components/Box/TextInput";
 import { statisticsSpaceStyle } from "~/components/Statistics/styles.css";
-import { loader } from "~/routes/store.prompt-package._index";
+import { loader } from "~/routes/store.package._index";
+import { callToast } from "~/zustand/toastSlice";
 
 export default function PackageComponent() {
   const navigate = useNavigate();
   const revalidator = useRevalidator();
   const { promptPackageList } = useLoaderData<typeof loader>();
   const [storeData, setStoreData] = useState<PromptPackageListType[]>();
-  const [updateCategory, setUpdateCategory] = useState<number | string>({
-    id: 0,
-    name: "",
-  });
+  // const [updateCategory, setUpdateCategory] = useState<number | string>({
+  //   id: 0,
+  //   name: "",
+  // });
   const [modal, setModal] = useState<boolean>(false);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function PackageComponent() {
               취소
             </Buttons>
             <Buttons theme="primaryFilled" size={"small"}>
-              변경
+              생성
             </Buttons>
           </Flex>
         </ModalContainer>
@@ -54,6 +55,7 @@ export default function PackageComponent() {
           size={"small"}
           onClick={async () => {
             revalidator.revalidate();
+            callToast("업데이트 되었습니다.", "success");
           }}
         >
           전체 업데이트

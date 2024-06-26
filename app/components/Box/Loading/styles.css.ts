@@ -43,5 +43,6 @@ export const loaderStyles = appStyles({
       width: "10em",
       height: "10em",
     },
+    zIndex: "10000",
   },
 });

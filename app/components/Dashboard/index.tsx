@@ -1,11 +1,13 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useRevalidator } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import Buttons from "~/components/Box/Buttons";
 import { loader } from "~/routes/_index";
 import { spaceRoleLabel } from "~/types/enum.types";
 import { dayJsFormatter } from "~/utils/formatter";
 import { thousand } from "~/utils/helpers";
+import { callToast } from "~/zustand/toastSlice";
 import Box from "../Box";
+import Loading from "../Box/Loading";
 import { TD, TH, Table } from "../Box/Table";
 import { dashboardStyle } from "./styles.css";
 import {
@@ -17,6 +19,7 @@ import {
 
 export default function Dashboard() {
   const response = useLoaderData<typeof loader>();
+  const revalidator = useRevalidator();
   const [totalData, setTotalData] = useState<TotalCountProps>();
   const [bestPromptData, setBestPromptData] = useState<PromptType[]>();
   const [recentJoinMemberData, setRecentJoinMemberData] =
@@ -25,6 +28,7 @@ export default function Dashboard() {
     useState<SpaceType[]>();
   const [recentCreatePromptData, setRecentCreatePromptData] =
     useState<PromptType[]>();
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     if (!response) return;
     if (response.data) {
@@ -43,6 +47,7 @@ export default function Dashboard() {
   }, [response]);
   return (
     <>
+      {loading && <Loading />}
       <Box
         display={"flex"}
         alignItems={"center"}
@@ -50,7 +55,20 @@ export default function Dashboard() {
         marginBottom={"16px"}
       >
         <p className={dashboardStyle.title}>대시보드</p>
-        <Buttons size={"small"}>전체 업데이트</Buttons>
+        <Buttons
+          size={"small"}
+          onClick={() => {
+            revalidator.revalidate();
+            if (revalidator.state === "loading") {
+              setLoading(true);
+            } else {
+              callToast("전체 업데이트가 완료되었습니다.", "success");
+              setLoading(false);
+            }
+          }}
+        >
+          전체 업데이트
+        </Buttons>
       </Box>
       <Box gap={"8px"} display={"flex"} marginBottom={"32px"}>
         <div className={dashboardStyle.statisticsTab}>
