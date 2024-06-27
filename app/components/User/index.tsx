@@ -3,6 +3,17 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { FormEvent, useMemo, useRef, useState } from "react";
 import { TableVirtuoso } from "react-virtuoso";
 import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Rectangle,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+import {
   StatisticsListCursorQueryParamsType,
   UserListCursorType,
   spaceListCursorQueryDefault,
@@ -24,6 +35,51 @@ import Loading from "../Box/Loading";
 import { TD, TH } from "../Box/Table";
 import TextInput from "../Box/TextInput";
 import { statisticsSpaceStyle } from "../Statistics/styles.css";
+
+const dummy = [
+  {
+    name: "Page A",
+    uv: 4000,
+    pv: 2400,
+    amt: 2400,
+  },
+  {
+    name: "Page B",
+    uv: 3000,
+    pv: 1398,
+    amt: 2210,
+  },
+  {
+    name: "Page C",
+    uv: 2000,
+    pv: 9800,
+    amt: 2290,
+  },
+  {
+    name: "Page D",
+    uv: 2780,
+    pv: 3908,
+    amt: 2000,
+  },
+  {
+    name: "Page E",
+    uv: 1890,
+    pv: 4800,
+    amt: 2181,
+  },
+  {
+    name: "Page F",
+    uv: 2390,
+    pv: 3800,
+    amt: 2500,
+  },
+  {
+    name: "Page G",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100,
+  },
+];
 
 const columns = [
   { name: "유저 ID", filterName: null },
@@ -125,6 +181,37 @@ export default function UserListComponent() {
   return (
     <>
       {loading && <Loading />}
+      <ResponsiveContainer width="100%" height="100%" minHeight="400px">
+        <BarChart
+          width={500}
+          height={300}
+          data={itemList}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+          barSize={10}
+        >
+          <CartesianGrid strokeDasharray="3 3" vertical={false} />
+          <XAxis
+            dataKey="name"
+            className={statisticsSpaceStyle.chartStyle}
+            axisLine={false}
+            tickLine={false}
+            tickMargin={8}
+          />
+          <YAxis axisLine={false} tickLine={false} />
+          <Tooltip />
+          <Bar
+            dataKey="promptExecutedCount"
+            name={"프롬프트 요청수"}
+            fill={vars.colors["Primary/Primary 200"]}
+            activeBar={<Rectangle fill="gold" />}
+          />
+        </BarChart>
+      </ResponsiveContainer>
       <Box
         display={"flex"}
         alignItems={"center"}

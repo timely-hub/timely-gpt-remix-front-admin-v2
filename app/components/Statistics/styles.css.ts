@@ -26,4 +26,7 @@ export const statisticsSpaceStyle = appStyles({
   load: {
     opacity: 1,
   },
+  chartStyle: {
+    ...getTextStyles("Grayscale/Black", "Body/14px/14px.400"),
+  },
 });
